@@ -10,10 +10,8 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 
 ## État du dépôt
 
-Scaffold `create-next-app` + `shadcn init` faits. **`src/` n'existe pas encore** : `components/ui/` et `lib/utils.ts`
-sont à la racine et `tsconfig.json` / `components.json` mappent encore `@/*` → `./*`. En créant `src/`, déplacer
-`components/` et `lib/`, puis changer `@/*` → `./src/*` dans `tsconfig.json` (+ ajouter `@app/*` → `./app/*`).
-`components.json` (aliases `@/components`, `@/lib/utils`) reste valable une fois l'alias corrigé.
+Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/utils.ts`, `config/`, `schema/`
+vides pour l'instant) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
 Installé aujourd'hui : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`. Tout le reste
 (Prisma, Zod, Recharts, Vitest, Docker, `sonner`, `next-themes`, `motion`) est la **cible** : vérifier `package.json`
