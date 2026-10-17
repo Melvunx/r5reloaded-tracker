@@ -10,8 +10,8 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 
 ## État du dépôt
 
-Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/utils.ts`, `config/`, `schema/`
-vides pour l'instant) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
+Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`
+(vide pour l'instant)) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
 Installé aujourd'hui : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`. Tout le reste
 (Prisma, Zod, Recharts, Vitest, Docker, `sonner`, `next-themes`, `motion`) est la **cible** : vérifier `package.json`
@@ -74,10 +74,10 @@ changements (`WATCHPACK_POLLING=true pnpm dev`).
   en‑têtes exacts `ChallengeName,ShotsHit,Kills,Weapon,Accuracy,Damage,CriticalShots,TotalShots,Roundtime`.
   Ensuite CSV ; `Accuracy` accepte `"45.2%"` ou `45.2`. Lignes invalides ignorées et listées (`Ligne N : …`),
   lignes valides insérées via `createMany`.
-- **Config armes** : 24 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
+- **Config armes** : 25 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
   des catégories, helpers `getWeaponByName`, `getWeaponImagePath(type, slug)` → `/apex-weapons/<type>/<slug>.png`,
   `getWeaponBadgePath(slug)` → `/apex-weapons/badges/<slug>.webp`. Images à reprendre telles quelles dans
-  `public/apex-weapons/`. Config v3 : `src/config/weapons.ts`, source unique de vérité.
+  `public/apex-weapons/`. Config v3 : `src/config/apex-weapons.config.ts` (+ `utils.config.ts`), source unique de vérité.
 - **Retour des Server Actions** : `ActionResult<T> = { success: true; data: T } | { success: false; error: string }`.
 
 ## 5. Pièges de la v2 à ne pas reproduire
@@ -191,7 +191,7 @@ app/                              # routes uniquement (+ globals.css)
 src/                              # tout le reste, alias @/* → ./src/*
   components/ui/                  # shadcn (ne pas modifier à la main sauf besoin)
   components/                     # composants métier
-  config/weapons.ts
+  config/                         # apex-weapons.config.ts, utils.config.ts
   schema/                         # Zod
   lib/{prisma,env,stats,r5-parser,utils}.ts
 prisma/schema.prisma, migrations/, seed.ts
