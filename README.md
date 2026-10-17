@@ -152,13 +152,13 @@ et la précision doit correspondre à `ShotsHit / TotalShots`.
 |---|---|
 | Pistolets | Wingman, RE-45, P2020 |
 | Mitraillettes | R-99, Volt, Alternator, Prowler |
-| Fusils d'assaut | R-301, Flatline, Havoc, Hemlok |
+| Fusils d'assaut | R-301, Flatline, Havoc, Hemlok, Nemesis |
 | Mitrailleuses | Devotion, L-Star, Spitfire |
 | Armes à longue portée | G7 Scout, Triple Take |
 | Fusils de précision | Charge Rifle, Kraber, Longbow, Sentinel |
 | Fusils à pompe | EVA-8, Mastiff, Mozambique, Peacekeeper |
 
-La liste se trouve dans `src/config/weapons.ts` et alimente à la fois le seed Prisma et les schémas Zod.
+La liste se trouve dans `src/config/apex-weapons.config.ts` et alimente à la fois le seed Prisma et les schémas Zod.
 
 ---
 
@@ -172,7 +172,7 @@ app/
 src/
   components/           # composants de l'application
   components/ui/        # composants shadcn/ui
-  config/weapons.ts     # liste des armes
+  config/apex-weapons.config.ts  # liste des armes
   schema/               # schémas Zod
   lib/                  # Prisma, parser R5Reloaded, calculs de stats
 prisma/
