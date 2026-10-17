@@ -69,7 +69,7 @@ pnpm install
 ```yaml
 services:
   db:
-    image: postgres:17
+    image: postgres:18
     restart: unless-stopped
     environment:
       POSTGRES_USER: apex
@@ -78,9 +78,10 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - apex_data:/var/lib/postgresql/data
+      - apex_data:/var/lib/postgresql
 
 volumes:
+
   apex_data:
 ```
 
