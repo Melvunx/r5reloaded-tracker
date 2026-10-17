@@ -10,12 +10,12 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 
 ## État du dépôt
 
-Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`
-(vide pour l'instant)) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
+Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
-Installé aujourd'hui : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`. Tout le reste
-(Prisma, Zod, Recharts, Vitest, Docker, `sonner`, `next-themes`, `motion`) est la **cible** : vérifier `package.json`
-avant de supposer qu'une dépendance existe. Scripts actuels : `dev`, `build`, `start`, `lint` seulement.
+Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`, Prisma 7 (CLI épinglé en
+7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Pas encore installés (**cible**) :
+Recharts, `sonner`, `next-themes`, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
+Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`.
 Le `README.md` décrit déjà l'app finie.
 
 ---
@@ -53,8 +53,8 @@ pnpm prisma migrate dev --name <nom>   # puis: pnpm prisma generate  (client dan
 pnpm prisma db seed
 pnpm dev                        # http://localhost:3000
 pnpm lint
-pnpm typecheck                  # à ajouter : "tsc --noEmit"
-pnpm test                       # à ajouter : vitest ; un seul fichier : pnpm test src/lib/stats.test.ts
+pnpm typecheck                  # tsc --noEmit
+pnpm test                       # vitest run ; un seul fichier : pnpm test src/schema/challenge.test.ts
 ```
 
 `.env` (jamais commité), validé par Zod dans `src/lib/env.ts` :
@@ -74,7 +74,7 @@ changements (`WATCHPACK_POLLING=true pnpm dev`).
   en‑têtes exacts `ChallengeName,ShotsHit,Kills,Weapon,Accuracy,Damage,CriticalShots,TotalShots,Roundtime`.
   Ensuite CSV ; `Accuracy` accepte `"45.2%"` ou `45.2`. Lignes invalides ignorées et listées (`Ligne N : …`),
   lignes valides insérées via `createMany`.
-- **Config armes** : 25 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
+- **Config armes** : 24 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
   des catégories, helpers `getWeaponByName`, `getWeaponImagePath(type, slug)` → `/apex-weapons/<type>/<slug>.png`,
   `getWeaponBadgePath(slug)` → `/apex-weapons/badges/<slug>.webp`. Images à reprendre telles quelles dans
   `public/apex-weapons/`. Config v3 : `src/config/apex-weapons.config.ts` (+ `utils.config.ts`), source unique de vérité.
@@ -163,7 +163,7 @@ Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportB
 
 ## 7. Validation Zod
 
-- Schémas dans `src/schema/` : `weapon.ts`, `challenge.ts`, `import.ts`, `filters.ts`, `env.ts`.
+- Schémas dans `src/schema/` : `weapon.ts` (`WEAPON_SLUGS`, `resolveWeaponSlug`, alias), `challenge.ts`, `import.ts`, `filters.ts`. Les schémas d'arme et de stats restent dans `src/config/apex-weapons.config.ts` ; le schéma des variables d'environnement est dans `src/lib/env.ts`.
 - **Une Server Action reçoit `unknown` et commence par `safeParse`.**
 - Enums dérivés de la config (`WEAPON_SLUGS`), types **inférés** (`z.infer`/`z.input`/`z.output`), jamais déclarés à la main.
 - Ligne importée : `z.coerce` pour les nombres, entiers ≥ 0, `roundtime > 0`, puis `.superRefine()` :

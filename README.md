@@ -152,7 +152,7 @@ et la précision doit correspondre à `ShotsHit / TotalShots`.
 |---|---|
 | Pistolets | Wingman, RE-45, P2020 |
 | Mitraillettes | R-99, Volt, Alternator, Prowler |
-| Fusils d'assaut | R-301, Flatline, Havoc, Hemlok, Nemesis |
+| Fusils d'assaut | R-301, Flatline, Havoc, Hemlok |
 | Mitrailleuses | Devotion, L-Star, Spitfire |
 | Armes à longue portée | G7 Scout, Triple Take |
 | Fusils de précision | Charge Rifle, Kraber, Longbow, Sentinel |

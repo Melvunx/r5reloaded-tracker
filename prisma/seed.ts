@@ -1,6 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../app/generated/prisma/client";
 import { WEAPONS } from "../src/config/apex-weapons.config";
+import { getWeaponAliases } from "../src/schema/weapon";
 
 process.loadEnvFile();
 
@@ -8,15 +9,10 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }),
 });
 
-// Variantes d'écriture rencontrées dans les exports : "R-99", "r99", "r-99"…
-function buildAliases(name: string, slug: string) {
-  const lower = name.toLowerCase();
-  return [...new Set([name, lower, lower.replace(/[-\s]/g, ""), slug])];
-}
-
 async function main() {
-  for (const { name, slug, type } of WEAPONS) {
-    const aliases = buildAliases(name, slug);
+  for (const weapon of WEAPONS) {
+    const { name, slug, type } = weapon;
+    const aliases = getWeaponAliases(weapon);
     await prisma.weapon.upsert({
       where: { id: slug },
       create: { id: slug, name, type, aliases },
@@ -24,7 +20,12 @@ async function main() {
     });
   }
 
-  process.stdout.write(`${WEAPONS.length} armes synchronisées\n`);
+  // Armes retirées de la config : on ne supprime que celles sans challenge (la FK l'interdirait sinon)
+  const { count } = await prisma.weapon.deleteMany({
+    where: { id: { notIn: WEAPONS.map((weapon) => weapon.slug) }, challenges: { none: {} } },
+  });
+
+  process.stdout.write(`${WEAPONS.length} armes synchronisées, ${count} supprimée(s)\n`);
 }
 
 main()
