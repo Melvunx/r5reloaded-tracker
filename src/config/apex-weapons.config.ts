@@ -87,42 +87,8 @@ export const WEAPONS_BY_TYPE = WEAPONS.reduce(
   ) as unknown as Record<WeaponType, Weapon[]>,
 );
 
-export const ChallengeStatSchema = z.object({
-  average: z.object({
-    accuracy: z.number(),
-    damage: z.number(),
-    kills: z.number(),
-  }),
-  totalGamePlayed: z.number(),
-  maxAccuracy: z.number(),
-  minAccuracy: z.number(),
-});
-
-export type ChallengeStat = z.infer<typeof ChallengeStatSchema>;
-
-export const WeaponStatSchema = z.object({
-  weapon: WeaponSchema,
-  challengePlayed: z.number(),
-  average: z.object({
-    accuracy: z.number(),
-    damage: z.number(),
-    kills: z.number(),
-    shotsHit: z.number(),
-  }),
-});
-
-export type WeaponStat = z.infer<typeof WeaponStatSchema>;
-
 // --- Helpers ---
-export function getWeaponsByType(type: WeaponType) {
-  return WEAPONS.filter((w) => w.type === type);
-}
-
-// undefined si l'arme est inconnue : à l'appelant de gérer l'erreur (cf. alias à l'import)
-export function getWeaponByName(name: string): Weapon | undefined {
-  return WEAPONS.find((w) => w.name === name);
-}
-
+// undefined si l'arme est inconnue : à l'appelant de gérer l'erreur
 export function getWeaponBySlug(slug: string): Weapon | undefined {
   return WEAPONS.find((w) => w.slug === slug);
 }
@@ -133,22 +99,4 @@ export function getWeaponImagePath(type: WeaponType, slug: string) {
 
 export function getWeaponBadgePath(slug: string) {
   return `/apex-weapons/badges/${slug}.webp`;
-}
-
-export function getImagePathByWeaponName(weaponName: string) {
-  const weapon = getWeaponByName(weaponName);
-  return weapon ? getWeaponImagePath(weapon.type, weapon.slug) : undefined;
-}
-
-export function defaultWeaponStats(weapon: Weapon): WeaponStat {
-  return {
-    weapon,
-    challengePlayed: 0,
-    average: {
-      accuracy: 0,
-      damage: 0,
-      kills: 0,
-      shotsHit: 0,
-    },
-  };
 }

@@ -82,7 +82,7 @@ changements (`WATCHPACK_POLLING=true pnpm dev`).
   ignorées et listées (`Ligne N : …`, numéro réel du fichier), lignes valides insérées via `createMany`. Deux lignes
   strictement identiques dans un même fichier sont des doublons : la 1re est gardée, les autres vont dans `duplicates`.
 - **Config armes** : 24 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
-  des catégories, helpers `getWeaponByName`, `getWeaponImagePath(type, slug)` → `/apex-weapons/<type>/<slug>.png`,
+  des catégories, helpers `getWeaponBySlug`, `getWeaponImagePath(type, slug)` → `/apex-weapons/<type>/<slug>.png`,
   `getWeaponBadgePath(slug)` → `/apex-weapons/badges/<slug>.webp`. Images à reprendre telles quelles dans
   `public/apex-weapons/`. Config v3 : `src/config/apex-weapons.config.ts` (+ `utils.config.ts`), source unique de vérité.
 - **Retour des Server Actions** : `ActionResult<T> = { success: true; data: T } | { success: false; error: string }`.

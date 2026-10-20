@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { WeaponImage } from "@/components/weapon-image";
 import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPlayTime } from "@/lib/stats";
+import { BEST_WEAPON_MIN_SHOTS, formatPlayTime } from "@/lib/stats";
 import type { DashboardStats } from "@/lib/stats-service";
 
 export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
@@ -14,7 +14,7 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
     {
       label: "Meilleure arme",
       value: kpi.bestWeaponName ? <span className="weapon-name">{kpi.bestWeaponName}</span> : "—",
-      hint: kpi.bestWeaponName ? "Meilleure précision (100 tirs min.)" : "Pas assez de tirs pour conclure",
+      hint: kpi.bestWeaponName ? `Meilleure précision (${BEST_WEAPON_MIN_SHOTS} tirs min.)` : "Pas assez de tirs pour conclure",
     },
     {
       label: "Arme préférée",
