@@ -18,7 +18,7 @@ Recharts, `motion` ; vérifier `package.json` avant de supposer qu'une dépendan
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
 Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`,
-`/mouse-settings` (historique DPI / sensibilité, fait).
+`/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle, faite).
 Le `README.md` décrit déjà l'app finie.
 
 ---
@@ -246,7 +246,7 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 3. Prisma : schéma §6, migration initiale, seed.
 4. Schémas Zod + tests.
 5. Parser R5Reloaded + action d'import + page d'import avec aperçu.
-6. Saisie manuelle.
+6. ~~Saisie manuelle~~ (fait : `/manual-entry`, `addManualChallenge`).
 7. `getChartData(filters)` + graphique + filtres en searchParams.
 8. Stats par arme + KPI.
 9. Polish : dark mode, états vides, skeletons, toasts.

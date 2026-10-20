@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 const LINKS = [
   { href: "/dashboard", label: "Tableau de bord" },
   { href: "/import", label: "Importer" },
+  { href: "/manual-entry", label: "Saisie" },
   { href: "/mouse-settings", label: "Souris" },
 ] as const;
 
