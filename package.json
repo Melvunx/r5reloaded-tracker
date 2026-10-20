@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
     "db:up": "docker compose up -d",
     "db:down": "docker compose stop",
     "db:studio": "prisma studio"
@@ -42,6 +43,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "fast-check": "^4.10.2",
     "prisma": "7.10.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",

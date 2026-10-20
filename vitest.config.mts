@@ -11,5 +11,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],
+    // Les tests d'intégration ont besoin de PostgreSQL : ils ont leur propre commande (`pnpm test:integration`)
+    exclude: ["src/**/*.integration.test.ts", "node_modules/**"],
   },
 });
