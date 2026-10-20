@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, type ChartConfig } from "@/components/ui/chart";
 import { APP_TIME_ZONE } from "@/config/time.config";
@@ -46,19 +46,32 @@ function SeriesLine({ name, color, stats }: { name?: string; color: string; stat
   );
 }
 
+function MouseLine({ mouse }: { mouse: NonNullable<ChartRow["mouse"]> }) {
+  return (
+    <div className="border-t pt-1.5 text-muted-foreground">
+      Souris :{" "}
+      <span className="font-mono text-foreground">
+        {mouse.dpi} DPI × {mouse.sensitivity}
+      </span>{" "}
+      · {mouse.cmPer360.toFixed(1)} cm/360° · eDPI {Math.round(mouse.edpi)}
+    </div>
+  );
+}
+
 function RowTooltip({ row, granularity, labels }: { row: ChartRow; granularity: Granularity; labels: Labels }) {
   return (
     <div className="grid gap-2 rounded-lg border bg-background px-2.5 py-1.5 text-xs shadow-xl">
       <div className="font-medium">{formatLabel(row.date, granularity)}</div>
       {row.a && <SeriesLine name={labels.b ? labels.a : undefined} color="var(--chart-1)" stats={row.a} />}
       {row.b && <SeriesLine name={labels.b ?? undefined} color="var(--chart-2)" stats={row.b} />}
+      {row.mouse && <MouseLine mouse={row.mouse} />}
     </div>
   );
 }
 
 type Labels = { a: string; b: string | null };
 
-export function AccuracyChart({ granularity, rows, compare, labels }: ChartData & { labels: Labels }) {
+export function AccuracyChart({ granularity, rows, compare, markers, labels }: ChartData & { labels: Labels }) {
   const chartConfig = {
     accuracyA: { label: compare ? labels.a : "Précision", color: "var(--chart-1)" },
     ...(compare && labels.b ? { accuracyB: { label: labels.b, color: "var(--chart-2)" } } : {}),
@@ -72,6 +85,7 @@ export function AccuracyChart({ granularity, rows, compare, labels }: ChartData 
           {granularity === "day"
             ? "Précision pondérée par jour (touchés / tirs totaux)."
             : "Précision de chaque partie."}
+          {markers.length > 0 && " Les traits pointillés marquent un changement de réglage souris."}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -99,6 +113,15 @@ export function AccuracyChart({ granularity, rows, compare, labels }: ChartData 
                 return active && row ? <RowTooltip row={row} granularity={granularity} labels={labels} /> : null;
               }}
             />
+            {markers.map((marker) => (
+              <ReferenceLine
+                key={marker.x}
+                x={marker.x}
+                stroke="var(--muted-foreground)"
+                strokeDasharray="4 4"
+                label={{ value: marker.label, position: "insideTopRight", fontSize: 11, fill: "var(--muted-foreground)" }}
+              />
+            ))}
             {compare && <ChartLegend content={<ChartLegendContent />} />}
             <Line
               dataKey="accuracyA"

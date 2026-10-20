@@ -1,4 +1,5 @@
 import type { ChartPoint } from "@/lib/chart-service";
+import type { MouseInfo } from "@/lib/mouse-link";
 
 /** Valeurs d'une série (une arme) à un point du graphique. */
 export type SeriesStats = Omit<ChartPoint, "date">;
@@ -13,6 +14,8 @@ export type ChartRow = {
   accuracyB: number | null;
   a: SeriesStats | null;
   b: SeriesStats | null;
+  /** Réglage souris actif à ce moment (null avant le premier réglage), ajouté par `attachMouse`. */
+  mouse?: MouseInfo | null;
 };
 
 const toStats = ({ accuracy, shotsHit, totalShots, sessions, weapons }: ChartPoint): SeriesStats => ({

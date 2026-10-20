@@ -1,6 +1,8 @@
 import { APP_TIME_ZONE } from "@/config/time.config";
 import { mergeSeries, type ChartRow } from "@/lib/chart-rows";
+import { attachMouse, findMarkers, type MouseMarker } from "@/lib/mouse-link";
 import { prisma } from "@/lib/prisma";
+import { listSensitivities } from "@/lib/sensitivity-service";
 import { rangeStart, weightedAccuracy } from "@/lib/stats";
 import type { ChartFilters } from "@/schema/filters";
 import { Prisma } from "@app/generated/prisma/client";
@@ -20,6 +22,8 @@ export type ChartData = {
   rows: ChartRow[];
   /** Vrai si la série B (arme comparée) est présente. */
   compare: boolean;
+  /** Changements de réglage souris visibles dans la plage affichée. */
+  markers: MouseMarker[];
 };
 
 /** Filtres du dashboard en `where` Prisma ; `period` borne `playedAt` (gte inclus, lt exclu). */
@@ -119,11 +123,13 @@ export async function getChartData(
     granularity === "session" ? getSessionPoints(f, since) : getDayPoints(f, since);
 
   const { compare, ...base } = filters;
-  const [a, b] = await Promise.all([
+  const [a, b, settings] = await Promise.all([
     load({ ...base, compare }),
     compare ? load({ ...base, weapon: compare, compare: undefined }) : Promise.resolve([]),
+    listSensitivities(),
   ]);
-  return { granularity, rows: mergeSeries(a, b), compare: Boolean(compare) };
+  const rows = attachMouse(mergeSeries(a, b), settings, granularity);
+  return { granularity, rows, compare: Boolean(compare), markers: findMarkers(rows, settings, granularity) };
 }
 
 /** Noms de challenges déjà joués, pour le filtre. */

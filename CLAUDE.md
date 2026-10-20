@@ -183,7 +183,7 @@ Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportB
 Pas de clé étrangère `Challenge → Sensitivity` : le réglage d'un challenge se déduit à la lecture de `playedAt`
 (`getSensitivityAt(date)` en base, `pickActive(settings, date)` en JS, même règle), ce qui reste juste si on corrige une date.
 cm/360° = `360 / (DPI × sensibilité × yaw) × 2,54` avec le yaw d'Apex = 0,022 (`src/config/mouse.config.ts`, `src/lib/mouse.ts`) ;
-eDPI = DPI × sensibilité. Ni l'un ni l'autre n'est stocké. Les ids sont des `cuid(2)` (validés par `z.cuid2`, dont la regex
+eDPI = DPI × sensibilité. Ni l'un ni l'autre n'est stocké. Le lien avec les stats est dans `src/lib/mouse-link.ts` (réglage actif par ligne du graphique, marqueurs de changement, périodes) et `mouse-stats-service.ts` (précision pondérée par période de réglage, carte `MouseStatsCard` du dashboard). Les ids sont des `cuid(2)` (validés par `z.cuid2`, dont la regex
 accepte aussi les anciens cuid v1).
 
 ## 7. Validation Zod

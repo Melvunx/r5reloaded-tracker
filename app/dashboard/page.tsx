@@ -7,12 +7,14 @@ import { AccuracyChart } from "@/components/dashboard/accuracy-chart";
 import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { KpiCards } from "@/components/dashboard/kpi-cards";
 import { WeaponStatsTable } from "@/components/dashboard/weapon-stats-table";
+import { MouseStatsCard } from "@/components/dashboard/mouse-stats-card";
 import { CompareCard } from "@/components/dashboard/compare-card";
 import { ChartFilters } from "@/components/dashboard/chart-filters";
 import { EmptyState } from "@/components/empty-state";
 import { getWeaponBySlug } from "@/config/apex-weapons.config";
 import { buttonVariants } from "@/components/ui/button";
 import { getChartData, listChallengeNames } from "@/lib/chart-service";
+import { getMouseStats } from "@/lib/mouse-stats-service";
 import { getDashboardStats } from "@/lib/stats-service";
 import { parseChartFilters } from "@/schema/filters";
 
@@ -26,10 +28,11 @@ async function DashboardContent({ searchParams }: Props) {
   const filters = parseChartFilters(await searchParams);
   // Même instant pour le graphique et les stats : leurs périodes (et la tendance) restent alignées
   const now = new Date();
-  const [chart, stats, challengeNames] = await Promise.all([
+  const [chart, stats, challengeNames, mouseStats] = await Promise.all([
     getChartData(filters, now),
     getDashboardStats(filters, now),
     listChallengeNames(),
+    getMouseStats(filters, now),
   ]);
 
   // Comparaison : on isole chaque arme pour lire ses stats sur la même période
@@ -71,6 +74,9 @@ async function DashboardContent({ searchParams }: Props) {
           </StaggerItem>
           <StaggerItem>
             <WeaponStatsTable weapons={stats.weapons} hasTrend={filters.range !== "all"} />
+          </StaggerItem>
+          <StaggerItem>
+            <MouseStatsCard stats={mouseStats} />
           </StaggerItem>
         </>
       ) : challengeNames.length === 0 ? (
