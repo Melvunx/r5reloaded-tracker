@@ -15,7 +15,8 @@ Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`
 Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`, Prisma 7 (CLI épinglé en
 7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Pas encore installés (**cible**) :
 Recharts, `sonner`, `next-themes`, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
-Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`.
+Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser fait (`src/lib/csv.ts`,
+`r5-parser.ts`, `hash.ts`, `export-date.ts`), reste l'action d'import et la page `/import`.
 Le `README.md` décrit déjà l'app finie.
 
 ---
@@ -70,10 +71,14 @@ changements (`WATCHPACK_POLLING=true pnpm dev`).
 
 ## 4. Acquis de la v2 à réutiliser
 
-- **Format d'import** : fichier `.txt` lu côté serveur. Ligne 1 = signature contenant `VERIF_LINE`. Ligne 2 =
-  en‑têtes exacts `ChallengeName,ShotsHit,Kills,Weapon,Accuracy,Damage,CriticalShots,TotalShots,Roundtime`.
-  Ensuite CSV ; `Accuracy` accepte `"45.2%"` ou `45.2`. Lignes invalides ignorées et listées (`Ligne N : …`),
-  lignes valides insérées via `createMany`.
+- **Format d'import** (vérifié sur un vrai export, `src/data/aimtrainer_results_*.txt`) : fichier `.txt` lu côté
+  serveur, fins de ligne `\r\n`. Ligne 1 = signature contenant `VERIF_LINE` (espace final), **ligne 2 vide**, ligne 3 =
+  en‑têtes `ChallengeName, ShotsHit, Kills, Weapon, Accuracy, Damage, CriticalShots, TotalShots, Roundtime ` (séparateur
+  `, ` et espace final : tout est trimé, ordre des colonnes libre). Ensuite une ligne CSV par challenge ; `Accuracy`
+  accepte `"45.2%"` ou `45.2`. Le nom du fichier contient le timestamp Unix de l'export
+  (`aimtrainer_results_1792494390.txt`) : `getExportDate()` (`src/lib/export-date.ts`) fournit la date de session par défaut, avant « aujourd'hui ». Lignes invalides
+  ignorées et listées (`Ligne N : …`, numéro réel du fichier), lignes valides insérées via `createMany`. Deux lignes
+  strictement identiques dans un même fichier sont des doublons : la 1re est gardée, les autres vont dans `duplicates`.
 - **Config armes** : 24 armes (`name`, `slug`, `type` ∈ PISTOL, SMG, AR, LMG, MARKSMAN, SNIPER, SHOTGUN), libellés FR
   des catégories, helpers `getWeaponByName`, `getWeaponImagePath(type, slug)` → `/apex-weapons/<type>/<slug>.png`,
   `getWeaponBadgePath(slug)` → `/apex-weapons/badges/<slug>.webp`. Images à reprendre telles quelles dans
@@ -193,7 +198,8 @@ src/                              # tout le reste, alias @/* → ./src/*
   components/                     # composants métier
   config/                         # apex-weapons.config.ts, utils.config.ts
   schema/                         # Zod
-  lib/{prisma,env,stats,r5-parser,utils}.ts
+  lib/{prisma,env,stats,csv,r5-parser,hash,export-date,utils}.ts
+  data/                           # exports R5Reloaded d'exemple (fixtures de tests)
 prisma/schema.prisma, migrations/, seed.ts
 public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 ```

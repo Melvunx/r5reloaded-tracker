@@ -1,0 +1,7 @@
+=== Aim Trainer v1.0 CSV Results Dump - Made by CafeFPS @CafeFPS === 
+
+ChallengeName, ShotsHit, Kills, Weapon, Accuracy, Damage, CriticalShots, TotalShots, Roundtime 
+STRAFING DUMMY, 193, 19, Flatline, 46.61%, 3888, 8, 414, 60
+STRAFING DUMMY, 182, 14, Volt, 44.49%, 2928, 7, 409, 60
+STRAFING DUMMY, 161, 12, Volt, 42.93%, 2587, 5, 375, 60
+STRAFING DUMMY, 161, 12, Volt, 42.93%, 2587, 5, 375, 60
