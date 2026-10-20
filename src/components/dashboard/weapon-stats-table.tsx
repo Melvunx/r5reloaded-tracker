@@ -44,7 +44,7 @@ function Trend({ value }: { value: number | null }) {
   if (value === null) return <span className="text-muted-foreground">—</span>;
   if (value === 0) return <span className="text-muted-foreground">=</span>;
   return (
-    <span className={cn("tabular-nums", value > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")}>
+    <span className={cn("font-mono tabular-nums", value > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")}>
       {value > 0 ? "▲ +" : "▼ "}
       {value.toFixed(2)} pts
     </span>
@@ -108,14 +108,14 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
                     {weapon.favorite === "category" && <Badge variant="outline">Favorite · {WEAPON_TYPE[weapon.type]}</Badge>}
                   </span>
                 </TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.challenges}</TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.accuracy.toFixed(2)} %</TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.criticalRate.toFixed(1)} %</TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.avgDamage}</TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.avgKills}</TableCell>
-                <TableCell className="text-right tabular-nums">{weapon.bestAccuracy.toFixed(2)} %</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.challenges}</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.accuracy.toFixed(2)} %</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.criticalRate.toFixed(1)} %</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.avgDamage}</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.avgKills}</TableCell>
+                <TableCell className="text-right font-mono tabular-nums">{weapon.bestAccuracy.toFixed(2)} %</TableCell>
                 {hasTrend && (
-                  <TableCell className="text-right tabular-nums">
+                  <TableCell className="text-right font-mono tabular-nums">
                     <Trend value={weapon.trend} />
                   </TableCell>
                 )}

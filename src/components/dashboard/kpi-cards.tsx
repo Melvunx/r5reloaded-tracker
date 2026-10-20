@@ -6,10 +6,10 @@ import type { DashboardStats } from "@/lib/stats-service";
 
 export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
   const { favoriteWeapon } = kpi;
-  const items: { label: string; value: ReactNode; hint: string }[] = [
-    { label: "Précision globale", value: `${kpi.accuracy.toFixed(2)} %`, hint: "Touchés / tirs totaux" },
-    { label: "Challenges joués", value: String(kpi.challenges), hint: "Sur la période" },
-    { label: "Temps de jeu", value: formatPlayTime(kpi.playTime), hint: "Durée cumulée des challenges" },
+  const items: { label: string; value: ReactNode; hint: string; numeric?: boolean }[] = [
+    { label: "Précision globale", value: `${kpi.accuracy.toFixed(2)} %`, hint: "Touchés / tirs totaux", numeric: true },
+    { label: "Challenges joués", value: String(kpi.challenges), hint: "Sur la période", numeric: true },
+    { label: "Temps de jeu", value: formatPlayTime(kpi.playTime), hint: "Durée cumulée des challenges", numeric: true },
     {
       label: "Meilleure arme",
       value: kpi.bestWeaponName ?? "—",
@@ -32,11 +32,11 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-      {items.map(({ label, value, hint }) => (
+      {items.map(({ label, value, hint, numeric }) => (
         <Card key={label}>
           <CardHeader>
             <CardDescription>{label}</CardDescription>
-            <CardTitle className="text-2xl">{value}</CardTitle>
+            <CardTitle className={numeric ? "font-mono text-2xl" : "text-2xl"}>{value}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">{hint}</CardContent>
         </Card>

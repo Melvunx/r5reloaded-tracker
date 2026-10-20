@@ -7,9 +7,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-heading: var(--font-rajdhani);
+  --color-highlight: var(--highlight);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,73 +49,76 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Palette « Apex » : rouge en couleur principale, orange (--highlight) en accent */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.985 0.004 70);
+  --foreground: oklch(0.2 0.02 25);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.2 0.02 25);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.2 0.02 25);
+  --primary: oklch(0.55 0.22 27);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.95 0.01 60);
+  --secondary-foreground: oklch(0.2 0.02 25);
+  --muted: oklch(0.95 0.01 60);
+  --muted-foreground: oklch(0.5 0.02 40);
+  --accent: oklch(0.94 0.015 55);
+  --accent-foreground: oklch(0.2 0.02 25);
+  --highlight: oklch(0.68 0.17 55);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --border: oklch(0.2 0.02 25 / 12%);
+  --input: oklch(0.2 0.02 25 / 15%);
+  --ring: oklch(0.6 0.2 27);
+  --chart-1: var(--primary);
+  --chart-2: var(--highlight);
+  --chart-3: oklch(0.62 0.1 200);
+  --chart-4: oklch(0.5 0.15 300);
+  --chart-5: oklch(0.75 0.06 80);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.985 0.004 70);
+  --sidebar-foreground: oklch(0.2 0.02 25);
+  --sidebar-primary: oklch(0.55 0.22 27);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.94 0.015 55);
+  --sidebar-accent-foreground: oklch(0.2 0.02 25);
+  --sidebar-border: oklch(0.2 0.02 25 / 12%);
+  --sidebar-ring: oklch(0.6 0.2 27);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: oklch(0.14 0.008 25);
+  --foreground: oklch(0.97 0.005 60);
+  --card: oklch(0.19 0.012 25);
+  --card-foreground: oklch(0.97 0.005 60);
+  --popover: oklch(0.19 0.012 25);
+  --popover-foreground: oklch(0.97 0.005 60);
+  --primary: oklch(0.6 0.23 27);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.26 0.02 30);
+  --secondary-foreground: oklch(0.97 0.005 60);
+  --muted: oklch(0.24 0.012 25);
+  --muted-foreground: oklch(0.72 0.02 40);
+  --accent: oklch(0.28 0.02 40);
+  --accent-foreground: oklch(0.97 0.005 60);
+  --highlight: oklch(0.74 0.17 55);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --ring: oklch(0.6 0.2 27);
+  --chart-1: var(--primary);
+  --chart-2: var(--highlight);
+  --chart-3: oklch(0.72 0.1 200);
+  --chart-4: oklch(0.65 0.17 300);
+  --chart-5: oklch(0.82 0.06 80);
+  --sidebar: oklch(0.19 0.012 25);
+  --sidebar-foreground: oklch(0.97 0.005 60);
+  --sidebar-primary: oklch(0.6 0.23 27);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.28 0.02 40);
+  --sidebar-accent-foreground: oklch(0.97 0.005 60);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-ring: oklch(0.6 0.2 27);
 }
 
 @layer base {
@@ -127,11 +131,16 @@
   html {
     @apply font-sans;
   }
+  h1,
+  h2,
+  h3 {
+    @apply font-heading;
+  }
 }
 
 /* Effets des armes favorites : `data-favorite` ("overall" | "category") et `data-type` sont posés par le tableau des stats. */
 [data-favorite] {
-  --fav-color: oklch(0.75 0.15 80);
+  --fav-color: var(--highlight);
 }
 [data-favorite][data-type="PISTOL"] { --fav-color: oklch(0.72 0.17 150); }
 [data-favorite][data-type="SMG"] { --fav-color: oklch(0.72 0.17 220); }
@@ -141,8 +150,12 @@
 [data-favorite][data-type="SNIPER"] { --fav-color: oklch(0.75 0.14 190); }
 [data-favorite][data-type="SHOTGUN"] { --fav-color: oklch(0.7 0.2 50); }
 
-/* Arme préférée de tout l'historique : le nom brille */
+/* Arme préférée de tout l'historique : le nom brille, dans la couleur d'accent et une police à part */
+[data-favorite="overall"][data-type] {
+  --fav-color: var(--highlight);
+}
 [data-favorite="overall"] {
+  font-family: var(--font-black-ops-one), var(--font-heading), sans-serif;
   background: linear-gradient(90deg, var(--foreground) 40%, var(--fav-color) 50%, var(--foreground) 60%) 0 0 / 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -153,7 +166,10 @@
   filter: drop-shadow(0 0 6px var(--fav-color));
 }
 
-/* Favorite d'une catégorie : halo coloré, animé différemment selon la famille d'arme */
+/* Favorite d'une catégorie : halo coloré, animé différemment selon la famille d'arme, police dédiée */
+[data-favorite="category"] {
+  font-family: var(--font-russo-one), var(--font-heading), sans-serif;
+}
 [data-favorite="category"] img {
   filter: drop-shadow(0 0 4px var(--fav-color));
   animation: fav-pulse 2.4s ease-in-out infinite;
