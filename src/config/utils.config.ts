@@ -5,4 +5,4 @@ import z from "zod";
 export const weaponNameSchema = z.string().min(1);
 export const slugSchema = z.string().min(1);
 
-export const idsSchema = z.array(z.cuid()).min(1);
+export const idsSchema = z.array(z.cuid2()).min(1);
