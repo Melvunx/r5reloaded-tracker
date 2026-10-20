@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 
 const LINKS = [
@@ -21,6 +22,7 @@ export function SiteHeader() {
               {label}
             </Link>
           ))}
+          <ThemeToggle />
         </nav>
       </div>
     </header>
