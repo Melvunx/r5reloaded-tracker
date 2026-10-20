@@ -192,6 +192,7 @@ src/
 prisma/
   schema.prisma, migrations/, seed.ts
 public/apex-weapons/         # images et badges des armes
+scripts/apex-tracker.sh      # lanceur (base Docker + serveur de dev)
 ```
 
 Les règles de conception (modèle de données, pièges évités par rapport à la v2, conventions) sont dans [`CLAUDE.md`](./CLAUDE.md).
@@ -213,6 +214,24 @@ Le fuseau utilisé pour regrouper les parties par jour et afficher les heures es
 | `pnpm test:watch` | Tests en mode watch |
 | `pnpm db:up` / `pnpm db:down` | Démarrer / arrêter PostgreSQL |
 | `pnpm db:studio` | Explorer la base dans le navigateur |
+
+---
+
+## ⚡ Lancer l'application de n'importe où
+
+Le script `scripts/apex-tracker.sh` démarre PostgreSQL (Docker) en arrière-plan, attend qu'il soit prêt, puis lance le serveur de dev.
+Pour l'appeler depuis n'importe quel dossier, crée un lien dans un dossier de ton `PATH` :
+
+```bash
+ln -s "$(pwd)/scripts/apex-tracker.sh" ~/.local/bin/apex-tracker
+```
+
+| Commande | Rôle |
+|---|---|
+| `apex-tracker` | Démarre la base puis le serveur de dev (Ctrl+C l'arrête ; la base reste allumée) |
+| `apex-tracker db` | Démarre seulement la base |
+| `apex-tracker stop` | Arrête la base (les données sont conservées dans le volume Docker) |
+| `apex-tracker status` | Dit si la base tourne |
 
 ---
 
