@@ -52,7 +52,17 @@ describe("R5_HEADER_LINE", () => {
 describe("ImportFormSchema", () => {
   const file = (name: string, content = "x") => new File([content], name, { type: "text/plain" });
 
-  it("met la date du jour par défaut", () => {
+  it("prend la date de l'export (nom du fichier) quand aucune date n'est saisie", () => {
+    const data = ImportFormSchema.parse({ file: file("aimtrainer_results_1792494390.txt"), playedAt: "" });
+    expect(data.playedAt.toISOString()).toBe("2026-10-20T11:06:30.000Z");
+  });
+
+  it("préfère la date saisie à celle du nom du fichier", () => {
+    const data = ImportFormSchema.parse({ file: file("aimtrainer_results_1792494390.txt"), playedAt: "2026-01-15" });
+    expect(data.playedAt).toEqual(new Date("2026-01-15"));
+  });
+
+  it("met la date du jour si le nom du fichier n'a pas de timestamp", () => {
     const data = ImportFormSchema.parse({ file: file("export.txt"), playedAt: "" });
     expect(Math.abs(data.playedAt.getTime() - Date.now())).toBeLessThan(5_000);
   });

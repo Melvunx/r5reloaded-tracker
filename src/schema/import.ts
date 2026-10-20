@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getExportDate } from "@/lib/export-date";
 import { ChallengeSchema, type ChallengeData } from "./challenge";
 
 /** En-têtes exacts attendus sur la 2e ligne d'un export R5Reloaded. */
@@ -54,10 +55,13 @@ export function parseImportRow(lineNumber: number, row: unknown): ImportLineResu
   };
 }
 
-// Un champ vide du formulaire (<input type="date"> non rempli) vaut « aujourd'hui »
+// Un champ vide du formulaire (<input type="date"> non rempli) vaut « non renseigné »
 const emptyToUndefined = (value: unknown) => (value === "" ? undefined : value);
 
-/** Formulaire d'import : le fichier `.txt` et la date de la session. */
+/**
+ * Formulaire d'import : le fichier `.txt` et la date de la session. Sans date saisie, on prend celle de l'export
+ * (timestamp du nom du fichier), à défaut aujourd'hui.
+ */
 export const ImportFormSchema = z.object({
   file: z
     .instanceof(File, { error: "Aucun fichier sélectionné" })
@@ -72,9 +76,12 @@ export const ImportFormSchema = z.object({
     z.coerce
       .date({ error: "La date de la session est invalide" })
       .refine((date) => date <= new Date(), "La date de la session ne peut pas être dans le futur")
-      .default(() => new Date()),
+      .optional(),
   ),
-});
+}).transform(({ file, playedAt }) => ({
+  file,
+  playedAt: playedAt ?? getExportDate(file.name) ?? new Date(),
+}));
 
 export type ImportFormInput = z.input<typeof ImportFormSchema>;
 export type ImportFormData = z.output<typeof ImportFormSchema>;
