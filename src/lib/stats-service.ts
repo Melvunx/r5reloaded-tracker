@@ -4,8 +4,10 @@ import { prisma } from "@/lib/prisma";
 import {
   buildKpi,
   buildWeaponStats,
+  pickFavorites,
   previousPeriod,
   rangeStart,
+  type Favorites,
   type Kpi,
   type WeaponStatRow,
   type WeaponTotals,
@@ -38,14 +40,19 @@ export type WeaponStat = WeaponStatRow & {
   name: string;
   slug: string;
   type: NonNullable<ReturnType<typeof getWeaponBySlug>>["type"];
-  /** Arme la plus jouée : de quoi lui réserver plus tard un effet visuel. */
-  isFavorite: boolean;
+  /** « overall » = arme préférée de tout l'historique, « category » = favorite de sa catégorie (pour les effets visuels). */
+  favorite: "overall" | "category" | null;
 };
 
 export type DashboardStats = {
   kpi: Kpi & { bestWeaponName: string | null; favoriteWeaponName: string | null };
   weapons: WeaponStat[];
 };
+
+function favoriteKind(favorites: Favorites, weaponId: string, type: WeaponStat["type"]): WeaponStat["favorite"] {
+  if (favorites.overall === weaponId) return "overall";
+  return favorites.byType[type] === weaponId ? "category" : null;
+}
 
 const weaponName = (slug: string | null) => (slug ? (getWeaponBySlug(slug)?.name ?? null) : null);
 
@@ -58,17 +65,21 @@ export async function getDashboardStats(filters: ChartFilters, now = new Date())
     before ? getWeaponTotals(filters, { gte: before.from, lt: before.to }) : Promise.resolve([]),
   ]);
 
+  // Les favorites se calculent sur tout l'historique : elles ne bougent pas quand on change de filtre
+  const allTime = await getWeaponTotals({ range: "all" }, {});
+  const favorites = pickFavorites(allTime, (id) => getWeaponBySlug(id)?.type);
+
   const kpi = buildKpi(current);
   const weapons = buildWeaponStats(current, previous).flatMap((row) => {
     const weapon = getWeaponBySlug(row.weaponId);
     // Une arme retirée de la config mais encore en base n'a ni nom ni image : on l'écarte plutôt que d'afficher un id brut
     return weapon
-      ? [{ ...row, name: weapon.name, slug: weapon.slug, type: weapon.type, isFavorite: row.weaponId === kpi.favoriteWeaponId }]
+      ? [{ ...row, name: weapon.name, slug: weapon.slug, type: weapon.type, favorite: favoriteKind(favorites, row.weaponId, weapon.type) }]
       : [];
   });
 
   return {
-    kpi: { ...kpi, bestWeaponName: weaponName(kpi.bestWeaponId), favoriteWeaponName: weaponName(kpi.favoriteWeaponId) },
+    kpi: { ...kpi, bestWeaponName: weaponName(kpi.bestWeaponId), favoriteWeaponName: weaponName(favorites.overall) },
     weapons,
   };
 }

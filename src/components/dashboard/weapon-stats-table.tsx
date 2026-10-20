@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getWeaponImagePath } from "@/config/apex-weapons.config";
+import { WEAPON_TYPE, getWeaponImagePath } from "@/config/apex-weapons.config";
 import type { WeaponStat } from "@/lib/stats-service";
 import { cn } from "@/lib/utils";
 
@@ -85,7 +85,7 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
             {rows.map((weapon) => (
               <TableRow key={weapon.slug}>
                 <TableCell>
-                  <span className="flex items-center gap-2 font-medium">
+                  <span className="flex items-center gap-2 font-medium" data-favorite={weapon.favorite ?? undefined} data-type={weapon.type}>
                     <Image
                       src={getWeaponImagePath(weapon.type, weapon.slug)}
                       alt=""
@@ -94,7 +94,8 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
                       className="h-5 w-10 object-contain"
                     />
                     {weapon.name}
-                    {weapon.isFavorite && <Badge variant="secondary">Préférée</Badge>}
+                    {weapon.favorite === "overall" && <Badge variant="secondary">Préférée</Badge>}
+                    {weapon.favorite === "category" && <Badge variant="outline">Favorite · {WEAPON_TYPE[weapon.type]}</Badge>}
                   </span>
                 </TableCell>
                 <TableCell className="text-right">{weapon.challenges}</TableCell>

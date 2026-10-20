@@ -1,3 +1,4 @@
+import type { WeaponType } from "@/config/apex-weapons.config";
 import type { ChartFilters } from "@/schema/filters";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -85,8 +86,6 @@ export type Kpi = {
   /** Temps de jeu cumulé, en secondes. */
   playTime: number;
   bestWeaponId: string | null;
-  /** Arme la plus jouée (nombre de challenges) ; null sans aucun challenge. */
-  favoriteWeaponId: string | null;
 };
 
 export function buildKpi(totals: WeaponTotals[]): Kpi {
@@ -95,14 +94,11 @@ export function buildKpi(totals: WeaponTotals[]): Kpi {
     .filter((t) => t.totalShots >= BEST_WEAPON_MIN_SHOTS)
     .map((t) => ({ weaponId: t.weaponId, accuracy: weightedAccuracy(t.shotsHit, t.totalShots) }))
     .sort((a, b) => b.accuracy - a.accuracy)[0];
-  // À égalité de challenges, l'arme avec le plus de tirs l'emporte
-  const favorite = [...totals].sort((a, b) => b.challenges - a.challenges || b.totalShots - a.totalShots)[0];
   return {
     accuracy: weightedAccuracy(sum((t) => t.shotsHit), sum((t) => t.totalShots)),
     challenges: sum((t) => t.challenges),
     playTime: sum((t) => t.roundtime),
     bestWeaponId: best?.weaponId ?? null,
-    favoriteWeaponId: favorite?.weaponId ?? null,
   };
 }
 
@@ -112,4 +108,25 @@ export function formatPlayTime(seconds: number) {
   if (minutes < 1) return `${seconds} s`;
   const hours = Math.floor(minutes / 60);
   return hours < 1 ? `${minutes} min` : `${hours} h ${String(minutes % 60).padStart(2, "0")}`;
+}
+
+export type Favorites = { overall: string | null; byType: Partial<Record<WeaponType, string>> };
+
+/**
+ * Arme préférée = la plus jouée (nombre de challenges), à égalité celle avec le plus de tirs.
+ * Une par catégorie en plus de la meilleure toutes catégories. Les armes de type inconnu sont ignorées par catégorie.
+ */
+export function pickFavorites(
+  totals: Pick<WeaponTotals, "weaponId" | "challenges" | "totalShots">[],
+  typeOf: (weaponId: string) => WeaponType | undefined,
+): Favorites {
+  const mostPlayed = (a: (typeof totals)[number], b: (typeof totals)[number]) =>
+    b.challenges - a.challenges || b.totalShots - a.totalShots;
+
+  const byType: Favorites["byType"] = {};
+  for (const entry of [...totals].sort(mostPlayed)) {
+    const type = typeOf(entry.weaponId);
+    if (type && !byType[type]) byType[type] = entry.weaponId;
+  }
+  return { overall: [...totals].sort(mostPlayed)[0]?.weaponId ?? null, byType };
 }

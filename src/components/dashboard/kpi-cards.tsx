@@ -15,7 +15,7 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
     {
       label: "Arme préférée",
       value: kpi.favoriteWeaponName ?? "—",
-      hint: kpi.favoriteWeaponName ? "La plus jouée (nombre de challenges)" : "Aucun challenge",
+      hint: kpi.favoriteWeaponName ? "La plus jouée, sur tout l'historique" : "Aucun challenge",
     },
   ];
 

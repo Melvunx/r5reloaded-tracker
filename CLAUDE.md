@@ -17,7 +17,7 @@ Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide
 `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
-Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision, KPI (dont « arme préférée » = la plus jouée) et stats par arme, filtres en `searchParams`, fait), `/import`,
+Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision, KPI (« arme préférée » = la plus jouée sur tout l'historique, + une favorite par catégorie avec effets CSS dans `globals.css`) et stats par arme, filtres en `searchParams`, fait), `/import`,
 `/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle + historique avec suppression, fait).
 Le `README.md` décrit déjà l'app finie.
 

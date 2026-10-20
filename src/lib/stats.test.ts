@@ -3,6 +3,7 @@ import {
   buildKpi,
   buildWeaponStats,
   formatPlayTime,
+  pickFavorites,
   previousPeriod,
   rangeStart,
   weightedAccuracy,
@@ -85,19 +86,22 @@ describe("buildKpi", () => {
   });
 });
 
-describe("arme préférée", () => {
-  it("est l'arme avec le plus de challenges, sans seuil de tirs", () => {
-    const kpi = buildKpi([totals({ challenges: 2 }), totals({ weaponId: "r99", challenges: 5, shotsHit: 1, totalShots: 5 })]);
-    expect(kpi.favoriteWeaponId).toBe("r99");
+describe("pickFavorites", () => {
+  const typeOf = (id: string) => ({ volt: "SMG", r99: "SMG", flatline: "AR" })[id] as "SMG" | "AR" | undefined;
+  const entry = (weaponId: string, challenges: number, totalShots = 100) => ({ weaponId, challenges, totalShots });
+
+  it("choisit l'arme la plus jouée, toutes catégories et par catégorie", () => {
+    const favorites = pickFavorites([entry("volt", 5), entry("r99", 2), entry("flatline", 3)], typeOf);
+    expect(favorites).toEqual({ overall: "volt", byType: { SMG: "volt", AR: "flatline" } });
   });
 
   it("départage les égalités par le nombre de tirs", () => {
-    const kpi = buildKpi([totals({ weaponId: "volt", totalShots: 400 }), totals({ weaponId: "r99", totalShots: 900 })]);
-    expect(kpi.favoriteWeaponId).toBe("r99");
+    expect(pickFavorites([entry("volt", 2, 400), entry("r99", 2, 900)], typeOf).overall).toBe("r99");
   });
 
-  it("est null sans données", () => {
-    expect(buildKpi([]).favoriteWeaponId).toBeNull();
+  it("ignore les armes de type inconnu par catégorie et gère l'absence de données", () => {
+    expect(pickFavorites([entry("ghost", 9)], typeOf)).toEqual({ overall: "ghost", byType: {} });
+    expect(pickFavorites([], typeOf)).toEqual({ overall: null, byType: {} });
   });
 });
 

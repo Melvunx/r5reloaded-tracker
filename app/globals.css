@@ -128,3 +128,60 @@
     @apply font-sans;
   }
 }
+
+/* Effets des armes favorites : `data-favorite` ("overall" | "category") et `data-type` sont posés par le tableau des stats. */
+[data-favorite] {
+  --fav-color: oklch(0.75 0.15 80);
+}
+[data-favorite][data-type="PISTOL"] { --fav-color: oklch(0.72 0.17 150); }
+[data-favorite][data-type="SMG"] { --fav-color: oklch(0.72 0.17 220); }
+[data-favorite][data-type="AR"] { --fav-color: oklch(0.7 0.2 30); }
+[data-favorite][data-type="LMG"] { --fav-color: oklch(0.72 0.17 300); }
+[data-favorite][data-type="MARKSMAN"] { --fav-color: oklch(0.78 0.15 95); }
+[data-favorite][data-type="SNIPER"] { --fav-color: oklch(0.75 0.14 190); }
+[data-favorite][data-type="SHOTGUN"] { --fav-color: oklch(0.7 0.2 50); }
+
+/* Arme préférée de tout l'historique : le nom brille */
+[data-favorite="overall"] {
+  background: linear-gradient(90deg, var(--foreground) 40%, var(--fav-color) 50%, var(--foreground) 60%) 0 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fav-shine 3s linear infinite;
+}
+[data-favorite="overall"] img {
+  filter: drop-shadow(0 0 6px var(--fav-color));
+}
+
+/* Favorite d'une catégorie : halo coloré, animé différemment selon la famille d'arme */
+[data-favorite="category"] img {
+  filter: drop-shadow(0 0 4px var(--fav-color));
+  animation: fav-pulse 2.4s ease-in-out infinite;
+}
+[data-favorite="category"]:is([data-type="AR"], [data-type="SHOTGUN"]) img {
+  animation: fav-flicker 1.4s steps(1, end) infinite; /* flammes */
+}
+[data-favorite="category"]:is([data-type="SMG"], [data-type="LMG"]) img {
+  animation: fav-shake 0.9s ease-in-out infinite; /* cadence de tir */
+}
+
+@keyframes fav-shine { to { background-position: -150% 0; } }
+@keyframes fav-pulse {
+  50% { filter: drop-shadow(0 0 9px var(--fav-color)); }
+}
+@keyframes fav-flicker {
+  0%, 100% { filter: drop-shadow(0 -1px 5px var(--fav-color)); }
+  25% { filter: drop-shadow(0 -2px 9px var(--fav-color)); }
+  50% { filter: drop-shadow(0 -1px 3px var(--fav-color)); }
+  75% { filter: drop-shadow(1px -2px 8px var(--fav-color)); }
+}
+@keyframes fav-shake {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(1.5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-favorite], [data-favorite] img {
+    animation: none;
+  }
+}
