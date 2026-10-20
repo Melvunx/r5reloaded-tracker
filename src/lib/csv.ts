@@ -20,7 +20,8 @@ export function parseCsv(text: string): CsvRecord[] {
   const endRecord = () => {
     cells.push(cell);
     // Une ligne vide donne une seule cellule vide : on l'ignore
-    if (cells.length > 1 || cells[0] !== "") records.push({ line: recordLine, cells });
+    if (cells.length > 1 || cells[0] !== "")
+      records.push({ line: recordLine, cells });
     cells = [];
     cell = "";
   };

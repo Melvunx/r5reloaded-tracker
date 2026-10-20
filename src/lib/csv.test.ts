@@ -38,8 +38,10 @@ describe("parseCsv", () => {
     ]);
   });
 
-  it("accepte un champ entre guillemets après un espace (`a, \"b\"`)", () => {
-    expect(parseCsv('a, "b,c", d')).toEqual([{ line: 1, cells: ["a", "b,c", " d"] }]);
+  it('accepte un champ entre guillemets après un espace (`a, "b"`)', () => {
+    expect(parseCsv('a, "b,c", d')).toEqual([
+      { line: 1, cells: ["a", "b,c", " d"] },
+    ]);
   });
 
   it("ne trim pas les cellules", () => {

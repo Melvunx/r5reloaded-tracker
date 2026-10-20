@@ -82,10 +82,9 @@ export const WEAPONS_BY_TYPE = WEAPONS.reduce(
     acc[weapon.type].push(weapon);
     return acc;
   },
-  Object.fromEntries(WeaponTypeSchema.options.map((type) => [type, []])) as unknown as Record<
-    WeaponType,
-    Weapon[]
-  >,
+  Object.fromEntries(
+    WeaponTypeSchema.options.map((type) => [type, []]),
+  ) as unknown as Record<WeaponType, Weapon[]>,
 );
 
 export const ChallengeStatSchema = z.object({
