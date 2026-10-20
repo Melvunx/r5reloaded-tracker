@@ -56,7 +56,8 @@ pnpm prisma db seed
 pnpm dev                        # http://localhost:3000
 pnpm lint
 pnpm typecheck                  # tsc --noEmit
-pnpm test                       # vitest run ; un seul fichier : pnpm test src/schema/challenge.test.ts
+pnpm test                       # vitest run (sans base) ; un seul fichier : pnpm test src/schema/challenge.test.ts
+pnpm test:integration           # tests sur PostgreSQL (docker up) ; base dédiée apex_tracker_test, créée et migrée toute seule
 ```
 
 `.env` (jamais commité), validé par Zod dans `src/lib/env.ts` :
@@ -251,3 +252,9 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 9. Polish : dark mode (fait : `ThemeProvider` + `ThemeToggle`, défaut = thème du système), états vides (`EmptyState`) et skeletons (`CardSkeleton`, `DashboardSkeleton`) faits ; palette « Apex » (rouge `--primary`, orange `--highlight` en accent, clair + sombre) et polices faites : titres Rajdhani, texte Inter, chiffres JetBrains Mono (`font-mono`), armes favorites en Black Ops One (préférée) / Russo One (catégories) via `[data-favorite]` dans `globals.css`. Animations `motion` faites : `app/template.tsx` → `PageTransition` (entrée), `TransitionLink` (sortie jouée avant `router.push`, car AnimatePresence ne marche pas avec le routeur de Next sans API internes), `Stagger` / `StaggerItem` (apparition en cascade), `MotionProvider` (`reducedMotion="user"`) dans `src/components/motion/`.
 
 Une étape est terminée quand `pnpm lint`, `pnpm typecheck` et `pnpm test` passent.
+
+Tests : `*.test.ts` (unitaires), `*.property.test.ts` et `robustness.test.ts` (fast-check : jamais d'exception sur une entrée
+quelconque, invariants), `src/__tests__/actions.test.ts` (actions avec services simulés : une entrée invalide n'atteint jamais la base),
+`src/__tests__/integration/*.integration.test.ts` (vraie base `apex_tracker_test`, exclus de `pnpm test` ; garde-fou : ils refusent de
+tourner sur une autre base). Les tests d'intégration vident les tables avant chaque test : ne jamais les pointer vers la base de l'app.
+Les identifiants de suppression passent par `entityId()` (`src/schema/shared.ts`), qui borne la longueur du cuid.
