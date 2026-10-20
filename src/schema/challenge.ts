@@ -113,3 +113,9 @@ export type ChallengeInput = z.input<typeof ChallengeSchema>;
 export type ChallengeData = z.output<typeof ChallengeSchema>;
 export type ManualChallengeInput = z.input<typeof ManualChallengeSchema>;
 export type ManualChallengeData = z.output<typeof ManualChallengeSchema>;
+
+/** Suppression d'un challenge saisi à la main (id généré par Prisma, cf. `DeleteImportSchema`). */
+export const DeleteChallengeSchema = z.object(
+  { id: z.cuid2({ error: "Identifiant de challenge invalide" }) },
+  { error: "Requête invalide" },
+);

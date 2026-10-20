@@ -18,7 +18,7 @@ Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
 Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision + filtres en `searchParams`, fait ; stats par arme et KPI à venir), `/import`,
-`/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle, faite).
+`/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle + historique avec suppression, fait).
 Le `README.md` décrit déjà l'app finie.
 
 ---

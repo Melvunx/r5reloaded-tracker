@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import { ManualEntryHistory } from "@/components/manual-entry/manual-entry-history";
 import { ManualEntryForm } from "@/components/manual-entry/manual-entry-form";
 
 export const metadata: Metadata = { title: "Saisie manuelle" };
@@ -13,6 +15,9 @@ export default function ManualEntryPage() {
         </p>
       </div>
       <ManualEntryForm />
+      <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement de l&apos;historique…</p>}>
+        <ManualEntryHistory />
+      </Suspense>
     </div>
   );
 }

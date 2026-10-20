@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ChallengeSchema, ManualChallengeSchema } from "./challenge";
+import { ChallengeSchema, DeleteChallengeSchema, ManualChallengeSchema } from "./challenge";
 
 const valid = {
   challengeName: "STRAFING DUMMY",
@@ -103,5 +103,17 @@ describe("ManualChallengeSchema", () => {
     };
     expect(issues("pas une date")).toEqual(["La date de la session est invalide"]);
     expect(issues("2999-01-01")).toEqual(["La date de la session ne peut pas être dans le futur"]);
+  });
+});
+
+describe("DeleteChallengeSchema", () => {
+  it("accepte un cuid généré par Prisma", () => {
+    expect(DeleteChallengeSchema.safeParse({ id: "psz01nr0a3t3mii29tgz45rk" }).success).toBe(true);
+  });
+
+  it("refuse un id invalide ou absent", () => {
+    expect(DeleteChallengeSchema.safeParse({ id: "../etc" }).success).toBe(false);
+    expect(DeleteChallengeSchema.safeParse({}).success).toBe(false);
+    expect(DeleteChallengeSchema.safeParse(null).success).toBe(false);
   });
 });
