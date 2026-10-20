@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import { WeaponImage } from "@/components/weapon-image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { WEAPON_TYPE, getWeaponImagePath } from "@/config/apex-weapons.config";
+import { WEAPON_TYPE } from "@/config/apex-weapons.config";
 import type { WeaponStat } from "@/lib/stats-service";
 import { cn } from "@/lib/utils";
 
@@ -86,13 +86,7 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
               <TableRow key={weapon.slug}>
                 <TableCell>
                   <span className="flex items-center gap-2 font-medium" data-favorite={weapon.favorite ?? undefined} data-type={weapon.type}>
-                    <Image
-                      src={getWeaponImagePath(weapon.type, weapon.slug)}
-                      alt=""
-                      width={40}
-                      height={20}
-                      className="h-5 w-10 object-contain"
-                    />
+                    <WeaponImage weapon={weapon} />
                     {weapon.name}
                     {weapon.favorite === "overall" && <Badge variant="secondary">Préférée</Badge>}
                     {weapon.favorite === "category" && <Badge variant="outline">Favorite · {WEAPON_TYPE[weapon.type]}</Badge>}

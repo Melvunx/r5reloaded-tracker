@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useState, useTransition, type SubmitEvent } from "react";
 import { toast } from "sonner";
 import { addManualChallenge } from "@app/actions/challenge";
+import { WeaponImage } from "@/components/weapon-image";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { WEAPON_TYPE, WEAPONS, WEAPONS_BY_TYPE, getWeaponImagePath, type Weapon } from "@/config/apex-weapons.config";
+import { WEAPON_TYPE, WEAPONS, WEAPONS_BY_TYPE, type Weapon } from "@/config/apex-weapons.config";
 
 const DEFAULT_CHALLENGE_NAME = "STRAFING DUMMY";
 
@@ -38,7 +38,7 @@ const NUMBER_FIELDS: { name: keyof Numbers; label: string }[] = [
 function WeaponOption({ weapon }: { weapon: Weapon }) {
   return (
     <span className="flex items-center gap-2">
-      <Image src={getWeaponImagePath(weapon.type, weapon.slug)} alt="" width={40} height={20} className="h-5 w-10 object-contain" />
+      <WeaponImage weapon={weapon} />
       {weapon.name}
     </span>
   );

@@ -1,7 +1,6 @@
-import Image from "next/image";
 import type { ReactNode } from "react";
+import { WeaponImage } from "@/components/weapon-image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getWeaponImagePath } from "@/config/apex-weapons.config";
 import { formatPlayTime } from "@/lib/stats";
 import type { DashboardStats } from "@/lib/stats-service";
 
@@ -21,13 +20,7 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
       // Mêmes attributs que dans le tableau : l'effet « arme préférée » de globals.css s'applique tout seul
       value: favoriteWeapon ? (
         <span className="flex items-center gap-2" data-favorite="overall" data-type={favoriteWeapon.type}>
-          <Image
-            src={getWeaponImagePath(favoriteWeapon.type, favoriteWeapon.slug)}
-            alt=""
-            width={48}
-            height={24}
-            className="h-6 w-12 object-contain"
-          />
+          <WeaponImage weapon={favoriteWeapon} base={{ width: 48, height: 24 }} />
           {favoriteWeapon.name}
         </span>
       ) : (

@@ -1,8 +1,8 @@
-import Image from "next/image";
+import { WeaponImage } from "@/components/weapon-image";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { getWeaponBadgePath, getWeaponBySlug } from "@/config/apex-weapons.config";
+import { getWeaponBySlug } from "@/config/apex-weapons.config";
 import type { ImportAnalysis } from "@/lib/import-file";
 
 export function ImportPreview({ analysis }: { analysis: ImportAnalysis }) {
@@ -62,7 +62,7 @@ export function ImportPreview({ analysis }: { analysis: ImportAnalysis }) {
                     <TableCell>{data.challengeName}</TableCell>
                     <TableCell>
                       <span className="flex items-center gap-2">
-                        <Image src={getWeaponBadgePath(data.weaponId)} alt="" width={24} height={24} />
+                        <WeaponImage weapon={{ slug: data.weaponId }} variant="badge" />
                         {weapon?.name ?? data.weaponId}
                       </span>
                     </TableCell>
