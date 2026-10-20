@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type FormEvent } from "react";
+import { useState, useTransition, type SubmitEvent } from "react";
 import { toast } from "sonner";
 import { saveSensitivity } from "@app/actions/mouse-settings";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -25,7 +25,7 @@ export function SensitivityForm({ defaultDpi, defaultSensitivity }: Props) {
   const sensitivityValue = Number(sensitivity.replace(",", "."));
   const hasPreview = dpiValue > 0 && sensitivityValue > 0;
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     startTransition(async () => {
