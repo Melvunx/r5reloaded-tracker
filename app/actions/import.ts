@@ -38,7 +38,7 @@ export async function confirmImport(input: unknown): Promise<ActionResult<{ batc
     const created = await createImportBatch(analysis.data);
     if (!created) return { success: false, error: "Ce fichier vient d'être importé" };
 
-    revalidatePath("/");
+    revalidatePath("/dashboard");
     revalidatePath("/import");
     return { success: true, data: { batchId: created.id, inserted: created.inserted } };
   } catch (error) {

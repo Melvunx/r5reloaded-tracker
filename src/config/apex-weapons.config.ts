@@ -124,6 +124,10 @@ export function getWeaponByName(name: string): Weapon | undefined {
   return WEAPONS.find((w) => w.name === name);
 }
 
+export function getWeaponBySlug(slug: string): Weapon | undefined {
+  return WEAPONS.find((w) => w.slug === slug);
+}
+
 export function getWeaponImagePath(type: WeaponType, slug: string) {
   return `/apex-weapons/${type.toLowerCase()}/${slug}.png`;
 }

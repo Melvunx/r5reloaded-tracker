@@ -13,10 +13,11 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
 Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`, Prisma 7 (CLI épinglé en
-7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Pas encore installés (**cible**) :
-Recharts, `sonner`, `next-themes`, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
-Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser fait (`src/lib/csv.ts`,
-`r5-parser.ts`, `hash.ts`, `export-date.ts`), reste l'action d'import et la page `/import`.
+7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Pas encore installés (**cible**) :
+Recharts, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
+Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
+et page `/import` (envoi + aperçu) faits ; reste l'historique des imports et « Annuler cet import ».
+Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`.
 Le `README.md` décrit déjà l'app finie.
 
 ---
@@ -179,6 +180,7 @@ Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportB
 
 ## 8. Fonctionnalités
 
+- **Page `/`** : présentation de l'application et comment l'utiliser (3 étapes). Le dashboard est sur `/dashboard`.
 - **Import** (`/import`) : drag & drop `.txt`, vérif signature + en‑têtes, **aperçu avant insertion** (valides / invalides, champ `playedAt` défaut = aujourd'hui), refus si hash déjà importé, historique avec « Annuler cet import ».
 - **Saisie manuelle** : formulaire shadcn (`Field`, `Input`, `Select` d'arme avec image), même schéma Zod client et serveur.
 - **Graphique** : une courbe de précision ; axe X par session sur « 1 jour », agrégé **par jour** (précision pondérée) sur semaine/mois ; tooltip date / arme / précision / touchés sur total. Option « comparer » : séries `--chart-1..5`.
@@ -189,7 +191,8 @@ Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportB
 
 ```
 app/                              # routes uniquement (+ globals.css)
-  layout.tsx, page.tsx            # dashboard (Server Component, lit les searchParams)
+  layout.tsx, page.tsx            # layout (en-tête + Toaster) ; page = présentation de l'app
+  dashboard/page.tsx              # dashboard (Server Component, lit les searchParams)
   import/page.tsx
   actions/                        # Server Actions ("use server"), retour ActionResult<T>
   generated/prisma/               # client Prisma généré (gitignore)
@@ -208,7 +211,11 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 - **Server Components par défaut** ; `"use client"` seulement pour filtres, formulaire, graphique.
 - **Agrégats en BDD** (`groupBy`/`aggregate`, ou `$queryRaw` typé pour `date_trunc`), pas en JS sur toutes les lignes.
 - Logique pure (parsing, stats) séparée des actions, testée avec Vitest.
-- shadcn : `pnpm dlx shadcn@latest add <composant>`. `cn()` depuis `@/lib/utils`.
+- shadcn : `pnpm dlx shadcn@latest add <composant>`. `cn()` depuis `@/lib/utils`. ⚠️ Avec le style `base-nova`, la CLI génère
+  `import { cn } from "cn"` et ajoute le paquet npm `cn` : après chaque `add`, remplacer par `@/lib/utils` et faire `pnpm remove cn`.
+- Server Actions appelées avec un `File` : `instanceof File` fonctionne côté Next ; limite de corps relevée à 6 Mo dans `next.config.ts`
+  (défaut 1 Mo). Pour les tester sans navigateur : `curl` multipart avec `Next-Action: <id>` (voir `.next/server/server-reference-manifest.json`),
+  champs `_1_<nom>` puis `0=["$K1"]` **en dernier**.
 - Pas de `any`, pas de `console.log` (garder `console.error` dans les `catch`).
 
 ## 10. Plan de reconstruction
