@@ -28,7 +28,7 @@ model Weapon {
 }
 
 model ImportBatch {
-  id         String      @id @default(cuid())
+  id         String      @id @default(cuid(2))
   fileName   String      @map("file_name")
   fileHash   String      @unique @map("file_hash")
   importedAt DateTime    @default(now()) @map("imported_at")
@@ -38,7 +38,7 @@ model ImportBatch {
 }
 
 model Challenge {
-  id            String       @id @default(cuid())
+  id            String       @id @default(cuid(2))
   challengeName String       @map("challenge_name")
   weaponId      String       @map("weapon_id")
   weapon        Weapon       @relation(fields: [weaponId], references: [id])
@@ -58,4 +58,19 @@ model Challenge {
   @@index([weaponId, playedAt])
   @@index([challengeName, playedAt])
   @@map("challenges")
+}
+
+// Historique des réglages souris : le réglage actif à une date est le plus récent dont `effectiveFrom` <= cette date
+model Sensitivity {
+  id            String   @id @default(cuid(2))
+  effectiveFrom DateTime @map("effective_from") // date à partir de laquelle ces réglages s'appliquent
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // --- Souris ---
+  mouseDpi         Int   @default(800) @map("mouse_dpi")
+  mouseSensitivity Float @default(1.0) @map("mouse_sensitivity")
+
+  @@index([effectiveFrom])
+  @@map("sensitivities")
 }
