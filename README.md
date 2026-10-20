@@ -27,6 +27,7 @@ dans un graphique filtrable par arme et par période, avec la précision et les 
   - **précision (%)** calculée sur l'ensemble des tirs : `tirs touchés / tirs totaux`
   - % de coups critiques, dégâts et kills moyens
   - nombre de challenges, meilleure précision, tendance par rapport à la période précédente
+- **Réglages souris** : historique de ton DPI et de ta sensibilité (eDPI, cm/360°), pour relier ta progression à tes réglages
 - **Résumé global** : précision globale, nombre de sessions, temps d'entraînement total, meilleure arme
 - Thème clair / sombre
 

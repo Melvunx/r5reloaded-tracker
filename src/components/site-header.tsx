@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 const LINKS = [
   { href: "/dashboard", label: "Tableau de bord" },
   { href: "/import", label: "Importer" },
+  { href: "/mouse-settings", label: "Souris" },
 ] as const;
 
 export function SiteHeader() {

@@ -17,7 +17,8 @@ Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide
 Recharts, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
-Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`.
+Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`,
+`/mouse-settings` (historique DPI / sensibilité, fait).
 Le `README.md` décrit déjà l'app finie.
 
 ---
@@ -132,7 +133,7 @@ model Weapon {
 }
 
 model ImportBatch {
-  id         String      @id @default(cuid())
+  id         String      @id @default(cuid(2))
   fileName   String      @map("file_name")
   fileHash   String      @unique @map("file_hash")
   importedAt DateTime    @default(now()) @map("imported_at")
@@ -142,7 +143,7 @@ model ImportBatch {
 }
 
 model Challenge {
-  id            String       @id @default(cuid())
+  id            String       @id @default(cuid(2))
   challengeName String       @map("challenge_name")
   weaponId      String       @map("weapon_id")
   weapon        Weapon       @relation(fields: [weaponId], references: [id])
@@ -163,9 +164,28 @@ model Challenge {
   @@index([challengeName, playedAt])
   @@map("challenges")
 }
+
+// Historique des réglages souris : le réglage actif à une date est le plus récent dont `effectiveFrom` <= cette date
+model Sensitivity {
+  id               String   @id @default(cuid(2))
+  effectiveFrom    DateTime @map("effective_from")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+  mouseDpi         Int      @default(800) @map("mouse_dpi")
+  mouseSensitivity Float    @default(1.0) @map("mouse_sensitivity")
+
+  @@index([effectiveFrom])
+  @@map("sensitivities")
+}
 ```
 
 Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportBatch` supprime ses challenges.
+
+Pas de clé étrangère `Challenge → Sensitivity` : le réglage d'un challenge se déduit à la lecture de `playedAt`
+(`getSensitivityAt(date)` en base, `pickActive(settings, date)` en JS, même règle), ce qui reste juste si on corrige une date.
+cm/360° = `360 / (DPI × sensibilité × yaw) × 2,54` avec le yaw d'Apex = 0,022 (`src/config/mouse.config.ts`, `src/lib/mouse.ts`) ;
+eDPI = DPI × sensibilité. Ni l'un ni l'autre n'est stocké. Les ids sont des `cuid(2)` (validés par `z.cuid2`, dont la regex
+accepte aussi les anciens cuid v1).
 
 ## 7. Validation Zod
 
@@ -180,6 +200,7 @@ Armes insérées par `prisma/seed.ts` depuis la config TS. Supprimer un `ImportB
 
 ## 8. Fonctionnalités
 
+- **Réglages souris** (`/mouse-settings`) : historique DPI / sensibilité avec date d'application, eDPI et cm/360° affichés, suppression avec confirmation.
 - **Page `/`** : présentation de l'application et comment l'utiliser (3 étapes). Le dashboard est sur `/dashboard`.
 - **Import** (`/import`) : drag & drop `.txt`, vérif signature + en‑têtes, **aperçu avant insertion** (valides / invalides, champ `playedAt` défaut = aujourd'hui), refus si hash déjà importé, historique avec « Annuler cet import ».
 - **Saisie manuelle** : formulaire shadcn (`Field`, `Input`, `Select` d'arme avec image), même schéma Zod client et serveur.
@@ -201,7 +222,7 @@ src/                              # tout le reste, alias @/* → ./src/*
   components/                     # composants métier
   config/                         # apex-weapons.config.ts, utils.config.ts
   schema/                         # Zod
-  lib/{prisma,env,stats,csv,r5-parser,hash,export-date,utils}.ts
+  lib/{prisma,env,stats,csv,r5-parser,hash,export-date,mouse,utils}.ts
   data/                           # exports R5Reloaded d'exemple (fixtures de tests)
 prisma/schema.prisma, migrations/, seed.ts
 public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
