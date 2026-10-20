@@ -55,8 +55,8 @@ export function parseImportRow(lineNumber: number, row: unknown): ImportLineResu
   };
 }
 
-// Un champ vide du formulaire (<input type="date"> non rempli) vaut « non renseigné »
-const emptyToUndefined = (value: unknown) => (value === "" ? undefined : value);
+// Un champ vide (`""`) ou absent (`formData.get` renvoie null) vaut « non renseigné » : sans ça, coerce.date(null) donne 1970
+const emptyToUndefined = (value: unknown) => (value === "" || value === null ? undefined : value);
 
 /**
  * Formulaire d'import : le fichier `.txt` et la date de la session. Sans date saisie, on prend celle de l'export
