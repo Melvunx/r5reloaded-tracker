@@ -31,11 +31,20 @@ function compare(a: WeaponStat, b: WeaponStat, key: SortKey) {
   return left - right;
 }
 
+// Largeur réservée même sans tri actif : les libellés ne bougent pas quand on change de colonne triée
+function SortArrow({ active, direction }: { active: boolean; direction: 1 | -1 }) {
+  return (
+    <span aria-hidden className="inline-block w-3 text-center">
+      {active ? (direction === 1 ? "↑" : "↓") : ""}
+    </span>
+  );
+}
+
 function Trend({ value }: { value: number | null }) {
   if (value === null) return <span className="text-muted-foreground">—</span>;
   if (value === 0) return <span className="text-muted-foreground">=</span>;
   return (
-    <span className={cn(value > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")}>
+    <span className={cn("tabular-nums", value > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400")}>
       {value > 0 ? "▲ +" : "▼ "}
       {value.toFixed(2)} pts
     </span>
@@ -73,9 +82,16 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
                   className={key === "name" ? undefined : "text-right"}
                   aria-sort={sort.key === key ? (sort.direction === 1 ? "ascending" : "descending") : undefined}
                 >
-                  <Button variant="ghost" size="sm" onClick={() => toggleSort(key)}>
+                  {/* Marges négatives = le padding du bouton ne décale plus le texte par rapport aux cellules */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={key === "name" ? "-ml-2.5" : "-mr-2.5"}
+                    onClick={() => toggleSort(key)}
+                  >
+                    {key !== "name" && <SortArrow active={sort.key === key} direction={sort.direction} />}
                     {label}
-                    {sort.key === key && (sort.direction === 1 ? " ↑" : " ↓")}
+                    {key === "name" && <SortArrow active={sort.key === key} direction={sort.direction} />}
                   </Button>
                 </TableHead>
               ))}
@@ -85,21 +101,21 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
             {rows.map((weapon) => (
               <TableRow key={weapon.slug}>
                 <TableCell>
-                  <span className="flex items-center gap-2 font-medium" data-favorite={weapon.favorite ?? undefined} data-type={weapon.type}>
+                  <span className="flex items-center gap-3 font-medium" data-favorite={weapon.favorite ?? undefined} data-type={weapon.type}>
                     <WeaponImage weapon={weapon} />
                     {weapon.name}
                     {weapon.favorite === "overall" && <Badge variant="secondary">Préférée</Badge>}
                     {weapon.favorite === "category" && <Badge variant="outline">Favorite · {WEAPON_TYPE[weapon.type]}</Badge>}
                   </span>
                 </TableCell>
-                <TableCell className="text-right">{weapon.challenges}</TableCell>
-                <TableCell className="text-right">{weapon.accuracy.toFixed(2)} %</TableCell>
-                <TableCell className="text-right">{weapon.criticalRate.toFixed(1)} %</TableCell>
-                <TableCell className="text-right">{weapon.avgDamage}</TableCell>
-                <TableCell className="text-right">{weapon.avgKills}</TableCell>
-                <TableCell className="text-right">{weapon.bestAccuracy.toFixed(2)} %</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.challenges}</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.accuracy.toFixed(2)} %</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.criticalRate.toFixed(1)} %</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.avgDamage}</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.avgKills}</TableCell>
+                <TableCell className="text-right tabular-nums">{weapon.bestAccuracy.toFixed(2)} %</TableCell>
                 {hasTrend && (
-                  <TableCell className="text-right">
+                  <TableCell className="text-right tabular-nums">
                     <Trend value={weapon.trend} />
                   </TableCell>
                 )}

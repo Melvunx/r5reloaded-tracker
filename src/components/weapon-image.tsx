@@ -22,5 +22,5 @@ export function WeaponImage({ weapon, variant = "image", base = DEFAULT_BASE[var
   const width = Math.round(base.width * WEAPON_IMAGE_SCALE);
   const height = Math.round(base.height * WEAPON_IMAGE_SCALE);
 
-  return <Image src={src} alt="" width={width} height={height} style={{ width, height }} className="shrink-0 object-contain" />;
+  return <Image src={src} alt="" width={width} height={height} style={{ width, height }} className="shrink-0 object-contain object-left" />;
 }
