@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ImportFormSchema, R5_HEADER_LINE, parseImportRow } from "./import";
+import { DeleteImportSchema, ImportFormSchema, R5_HEADER_LINE, parseImportRow } from "./import";
 
 const row = {
   ChallengeName: "STRAFING DUMMY",
@@ -75,5 +75,17 @@ describe("ImportFormSchema", () => {
     expect(messages({})).toEqual(["Aucun fichier sélectionné"]);
     expect(messages({ file: file("export.csv") })).toEqual(["Le fichier doit être un .txt"]);
     expect(messages({ file: file("export.txt", "") })).toEqual(["Le fichier est vide"]);
+  });
+});
+
+describe("DeleteImportSchema", () => {
+  it("accepte un cuid généré par Prisma et refuse le reste", () => {
+    expect(DeleteImportSchema.safeParse({ id: "cmvgo9jie0000p10tmo7qgije" }).success).toBe(true); // cuid v1 (Prisma)
+    expect(DeleteImportSchema.safeParse({ id: "tz4a98xxat96iws9zmbrgj3a" }).success).toBe(true); // cuid2
+    expect(DeleteImportSchema.safeParse({ id: "123e4567-e89b-12d3-a456-426614174000" }).success).toBe(false);
+    expect(DeleteImportSchema.safeParse({ id: "" }).success).toBe(false);
+    expect(DeleteImportSchema.safeParse({}).success).toBe(false);
+    const notAnObject = DeleteImportSchema.safeParse(null);
+    expect(notAnObject.success ? [] : notAnObject.error.issues.map((issue) => issue.message)).toEqual(["Requête invalide"]);
   });
 });

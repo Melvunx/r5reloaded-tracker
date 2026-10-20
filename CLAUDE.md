@@ -16,7 +16,7 @@ Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide
 7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Pas encore installés (**cible**) :
 Recharts, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
-et page `/import` (envoi + aperçu) faits ; reste l'historique des imports et « Annuler cet import ».
+et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
 Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`.
 Le `README.md` décrit déjà l'app finie.
 

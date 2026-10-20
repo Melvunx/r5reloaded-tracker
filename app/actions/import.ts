@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import type { ActionResult } from "@/lib/action-result";
 import { env } from "@/lib/env";
 import { analyzeImportFile, type ImportAnalysis } from "@/lib/import-file";
-import { createImportBatch, findBatchByHash } from "@/lib/import-service";
+import { createImportBatch, findBatchByHash, removeImportBatch } from "@/lib/import-service";
+import { DeleteImportSchema } from "@/schema/import";
 
 const ALREADY_IMPORTED = (fileName: string, importedAt: Date) =>
   `Ce fichier a déjà été importé (« ${fileName} », le ${importedAt.toLocaleDateString("fr-FR")})`;
@@ -44,5 +45,23 @@ export async function confirmImport(input: unknown): Promise<ActionResult<{ batc
   } catch (error) {
     console.error("confirmImport", error);
     return { success: false, error: "Erreur serveur pendant l'import" };
+  }
+}
+
+/** Annule un import : supprime le lot et ses challenges. Le fichier redevient importable (son hash disparaît). */
+export async function deleteImportBatch(input: unknown): Promise<ActionResult<{ deleted: number }>> {
+  const parsed = DeleteImportSchema.safeParse(input);
+  if (!parsed.success) return { success: false, error: parsed.error.issues[0].message };
+
+  try {
+    const deleted = await removeImportBatch(parsed.data.id);
+    if (deleted === null) return { success: false, error: "Cet import n'existe plus" };
+
+    revalidatePath("/dashboard");
+    revalidatePath("/import");
+    return { success: true, data: { deleted } };
+  } catch (error) {
+    console.error("deleteImportBatch", error);
+    return { success: false, error: "Erreur serveur pendant l'annulation de l'import" };
   }
 }

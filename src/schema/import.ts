@@ -85,3 +85,12 @@ export const ImportFormSchema = z.object({
 
 export type ImportFormInput = z.input<typeof ImportFormSchema>;
 export type ImportFormData = z.output<typeof ImportFormSchema>;
+
+/**
+ * Annulation d'un import : l'id est un cuid généré par Prisma, pas un uuid. `z.cuid2` (cuid v1 est déprécié) a une regex
+ * permissive qui accepte aussi les ids v1 produits par `@default(cuid())`.
+ */
+export const DeleteImportSchema = z.object(
+  { id: z.cuid2({ error: "Identifiant d'import invalide" }) },
+  { error: "Requête invalide" },
+);

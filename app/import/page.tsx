@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ImportForm } from "@/components/import/import-form";
+import { ImportHistory } from "@/components/import/import-history";
 
 export const metadata: Metadata = { title: "Importer des résultats" };
 
@@ -13,6 +15,9 @@ export default function ImportPage() {
         </p>
       </div>
       <ImportForm />
+      <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement de l&apos;historique…</p>}>
+        <ImportHistory />
+      </Suspense>
     </div>
   );
 }
