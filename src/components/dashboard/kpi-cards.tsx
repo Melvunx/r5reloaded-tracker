@@ -1,9 +1,13 @@
+import Image from "next/image";
+import type { ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { getWeaponImagePath } from "@/config/apex-weapons.config";
 import { formatPlayTime } from "@/lib/stats";
 import type { DashboardStats } from "@/lib/stats-service";
 
 export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
-  const items = [
+  const { favoriteWeapon } = kpi;
+  const items: { label: string; value: ReactNode; hint: string }[] = [
     { label: "Précision globale", value: `${kpi.accuracy.toFixed(2)} %`, hint: "Touchés / tirs totaux" },
     { label: "Challenges joués", value: String(kpi.challenges), hint: "Sur la période" },
     { label: "Temps de jeu", value: formatPlayTime(kpi.playTime), hint: "Durée cumulée des challenges" },
@@ -14,8 +18,22 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
     },
     {
       label: "Arme préférée",
-      value: kpi.favoriteWeaponName ?? "—",
-      hint: kpi.favoriteWeaponName ? "La plus jouée, sur tout l'historique" : "Aucun challenge",
+      // Mêmes attributs que dans le tableau : l'effet « arme préférée » de globals.css s'applique tout seul
+      value: favoriteWeapon ? (
+        <span className="flex items-center gap-2" data-favorite="overall" data-type={favoriteWeapon.type}>
+          <Image
+            src={getWeaponImagePath(favoriteWeapon.type, favoriteWeapon.slug)}
+            alt=""
+            width={48}
+            height={24}
+            className="h-6 w-12 object-contain"
+          />
+          {favoriteWeapon.name}
+        </span>
+      ) : (
+        "—"
+      ),
+      hint: favoriteWeapon ? "La plus jouée, sur tout l'historique" : "Aucun challenge",
     },
   ];
 

@@ -45,7 +45,7 @@ export type WeaponStat = WeaponStatRow & {
 };
 
 export type DashboardStats = {
-  kpi: Kpi & { bestWeaponName: string | null; favoriteWeaponName: string | null };
+  kpi: Kpi & { bestWeaponName: string | null; favoriteWeapon: { name: string; slug: string; type: WeaponStat["type"] } | null };
   weapons: WeaponStat[];
 };
 
@@ -79,7 +79,7 @@ export async function getDashboardStats(filters: ChartFilters, now = new Date())
   });
 
   return {
-    kpi: { ...kpi, bestWeaponName: weaponName(kpi.bestWeaponId), favoriteWeaponName: weaponName(favorites.overall) },
+    kpi: { ...kpi, bestWeaponName: weaponName(kpi.bestWeaponId), favoriteWeapon: favorites.overall ? (getWeaponBySlug(favorites.overall) ?? null) : null },
     weapons,
   };
 }
