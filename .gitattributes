@@ -1,0 +1,2 @@
+# Exports R5Reloaded de test : garder les octets d'origine (CRLF)
+src/data/*.txt -text
