@@ -63,7 +63,7 @@ export function ImportPreview({ analysis }: { analysis: ImportAnalysis }) {
                     <TableCell>
                       <span className="flex items-center gap-2">
                         <WeaponImage weapon={{ slug: data.weaponId }} variant="badge" />
-                        {weapon?.name ?? data.weaponId}
+                        <span className="weapon-name">{weapon?.name ?? data.weaponId}</span>
                       </span>
                     </TableCell>
                     <TableCell className="text-right">{data.accuracy.toFixed(2)} %</TableCell>

@@ -13,7 +13,7 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
     { label: "Temps de jeu", value: formatPlayTime(kpi.playTime), hint: "Durée cumulée des challenges", numeric: true },
     {
       label: "Meilleure arme",
-      value: kpi.bestWeaponName ?? "—",
+      value: kpi.bestWeaponName ? <span className="weapon-name">{kpi.bestWeaponName}</span> : "—",
       hint: kpi.bestWeaponName ? "Meilleure précision (100 tirs min.)" : "Pas assez de tirs pour conclure",
     },
     {
@@ -22,7 +22,7 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
       value: favoriteWeapon ? (
         <span className="flex items-center gap-2" data-favorite="overall" data-type={favoriteWeapon.type}>
           <WeaponImage weapon={favoriteWeapon} base={{ width: 48, height: 24 }} />
-          {favoriteWeapon.name}
+          <span className="weapon-name">{favoriteWeapon.name}</span>
         </span>
       ) : (
         "—"

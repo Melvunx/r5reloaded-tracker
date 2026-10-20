@@ -39,7 +39,7 @@ function WeaponOption({ weapon }: { weapon: Weapon }) {
   return (
     <span className="flex items-center gap-2">
       <WeaponImage weapon={weapon} />
-      {weapon.name}
+      <span className="weapon-name">{weapon.name}</span>
     </span>
   );
 }

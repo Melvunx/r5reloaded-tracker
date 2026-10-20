@@ -37,7 +37,9 @@ export async function ManualEntryHistory() {
               {challenges.map((challenge) => (
                 <TableRow key={challenge.id}>
                   <TableCell>{dateTime.format(challenge.playedAt)}</TableCell>
-                  <TableCell className="font-medium">{challenge.weapon.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <span className="weapon-name">{challenge.weapon.name}</span>
+                  </TableCell>
                   <TableCell>{challenge.challengeName}</TableCell>
                   <TableCell className="text-right">
                     {challenge.shotsHit} / {challenge.totalShots}

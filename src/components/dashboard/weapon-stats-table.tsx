@@ -103,7 +103,7 @@ export function WeaponStatsTable({ weapons, hasTrend }: { weapons: WeaponStat[];
                 <TableCell>
                   <span className="flex items-center gap-3 font-medium" data-favorite={weapon.favorite ?? undefined} data-type={weapon.type}>
                     <WeaponImage weapon={weapon} />
-                    {weapon.name}
+                    <span className="weapon-name">{weapon.name}</span>
                     {weapon.favorite === "overall" && <Badge variant="secondary">Préférée</Badge>}
                     {weapon.favorite === "category" && <Badge variant="outline">Favorite · {WEAPON_TYPE[weapon.type]}</Badge>}
                   </span>

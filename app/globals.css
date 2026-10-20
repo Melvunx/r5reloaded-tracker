@@ -138,24 +138,51 @@
   }
 }
 
-/* Effets des armes favorites : `data-favorite` ("overall" | "category") et `data-type` sont posés par le tableau des stats. */
+/* Noms d'armes : Russo One partout ; seule l'arme préférée a sa propre police (Black Ops One) */
+.weapon-name {
+  font-family: var(--font-russo-one), var(--font-heading), sans-serif;
+}
+[data-favorite="overall"] .weapon-name {
+  font-family: var(--font-black-ops-one), var(--font-heading), sans-serif;
+}
+
+/* Une couleur par catégorie pour leurs favorites (plus sombre en clair, plus lumineuse en sombre) */
+:root {
+  --fav-pistol: oklch(0.58 0.17 150);
+  --fav-smg: oklch(0.55 0.2 300);
+  --fav-ar: oklch(0.6 0.13 215);
+  --fav-lmg: oklch(0.58 0.22 350);
+  --fav-marksman: oklch(0.68 0.15 95);
+  --fav-sniper: oklch(0.52 0.19 262);
+  --fav-shotgun: oklch(0.58 0.23 25);
+}
+.dark {
+  --fav-pistol: oklch(0.78 0.19 150);
+  --fav-smg: oklch(0.74 0.17 300);
+  --fav-ar: oklch(0.82 0.12 210);
+  --fav-lmg: oklch(0.76 0.19 350);
+  --fav-marksman: oklch(0.88 0.16 100);
+  --fav-sniper: oklch(0.72 0.15 255);
+  --fav-shotgun: oklch(0.7 0.21 25);
+}
+
+/* Effets des armes favorites : `data-favorite` ("overall" | "category") et `data-type` sont posés sur le nom de l'arme. */
 [data-favorite] {
   --fav-color: var(--highlight);
 }
-[data-favorite][data-type="PISTOL"] { --fav-color: oklch(0.72 0.17 150); }
-[data-favorite][data-type="SMG"] { --fav-color: oklch(0.72 0.17 220); }
-[data-favorite][data-type="AR"] { --fav-color: oklch(0.7 0.2 30); }
-[data-favorite][data-type="LMG"] { --fav-color: oklch(0.72 0.17 300); }
-[data-favorite][data-type="MARKSMAN"] { --fav-color: oklch(0.78 0.15 95); }
-[data-favorite][data-type="SNIPER"] { --fav-color: oklch(0.75 0.14 190); }
-[data-favorite][data-type="SHOTGUN"] { --fav-color: oklch(0.7 0.2 50); }
+[data-favorite][data-type="PISTOL"] { --fav-color: var(--fav-pistol); }
+[data-favorite][data-type="SMG"] { --fav-color: var(--fav-smg); }
+[data-favorite][data-type="AR"] { --fav-color: var(--fav-ar); }
+[data-favorite][data-type="LMG"] { --fav-color: var(--fav-lmg); }
+[data-favorite][data-type="MARKSMAN"] { --fav-color: var(--fav-marksman); }
+[data-favorite][data-type="SNIPER"] { --fav-color: var(--fav-sniper); }
+[data-favorite][data-type="SHOTGUN"] { --fav-color: var(--fav-shotgun); }
 
 /* Arme préférée de tout l'historique : le nom brille, dans la couleur d'accent et une police à part */
 [data-favorite="overall"][data-type] {
   --fav-color: var(--highlight);
 }
 [data-favorite="overall"] {
-  font-family: var(--font-black-ops-one), var(--font-heading), sans-serif;
   background: linear-gradient(90deg, var(--foreground) 40%, var(--fav-color) 50%, var(--foreground) 60%) 0 0 / 250% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -166,9 +193,9 @@
   filter: drop-shadow(0 0 6px var(--fav-color));
 }
 
-/* Favorite d'une catégorie : halo coloré, animé différemment selon la famille d'arme, police dédiée */
+/* Favorite d'une catégorie : nom dans la couleur de sa catégorie, halo animé différemment selon la famille d'arme */
 [data-favorite="category"] {
-  font-family: var(--font-russo-one), var(--font-heading), sans-serif;
+  color: var(--fav-color);
 }
 [data-favorite="category"] img {
   filter: drop-shadow(0 0 4px var(--fav-color));
