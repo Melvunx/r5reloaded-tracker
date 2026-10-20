@@ -1,3 +1,4 @@
+import { EmptyState } from "@/components/empty-state";
 import { DeleteSensitivityButton } from "@/components/mouse-settings/delete-sensitivity-button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,7 +23,7 @@ export function SensitivityHistory({ sensitivities }: { sensitivities: Sensitivi
       </CardHeader>
       <CardContent>
         {sensitivities.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Aucun réglage enregistré pour le moment.</p>
+          <EmptyState title="Aucun réglage enregistré" description="Enregistre ton DPI et ta sensibilité pour suivre leur évolution." />
         ) : (
           <Table>
             <TableHeader>

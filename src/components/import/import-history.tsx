@@ -1,4 +1,5 @@
 import { CancelImportButton } from "@/components/import/cancel-import-button";
+import { EmptyState } from "@/components/empty-state";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { HISTORY_LIMIT, listImportBatches } from "@/lib/import-service";
@@ -17,7 +18,7 @@ export async function ImportHistory() {
       </CardHeader>
       <CardContent>
         {batches.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Aucun import pour le moment.</p>
+          <EmptyState title="Aucun import pour le moment" description="Les fichiers que tu importes apparaîtront ici, avec la possibilité de les annuler." />
         ) : (
           <Table>
             <TableHeader>

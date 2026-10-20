@@ -249,6 +249,6 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 6. ~~Saisie manuelle~~ (fait : `/manual-entry`, `addManualChallenge`).
 7. ~~`getChartData(filters)` + graphique + filtres en searchParams~~ (fait : `src/lib/chart-service.ts`, `src/components/dashboard/`).
 8. ~~Stats par arme + KPI~~ (fait : `src/lib/stats.ts`, `stats-service.ts`).
-9. Polish : dark mode (fait : `ThemeProvider` + `ThemeToggle`, défaut = thème du système), états vides, skeletons, toasts.
+9. Polish : dark mode (fait : `ThemeProvider` + `ThemeToggle`, défaut = thème du système), états vides (`EmptyState`) et skeletons (`CardSkeleton`, `DashboardSkeleton`) faits ; reste la passe couleurs / design.
 
 Une étape est terminée quand `pnpm lint`, `pnpm typecheck` et `pnpm test` passent.

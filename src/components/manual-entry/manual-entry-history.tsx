@@ -1,4 +1,5 @@
 import { DeleteChallengeButton } from "@/components/manual-entry/delete-challenge-button";
+import { EmptyState } from "@/components/empty-state";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { MANUAL_HISTORY_LIMIT, listManualChallenges } from "@/lib/challenge-service";
@@ -19,7 +20,7 @@ export async function ManualEntryHistory() {
       </CardHeader>
       <CardContent>
         {challenges.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Aucune saisie manuelle pour le moment.</p>
+          <EmptyState title="Aucune saisie manuelle" description="Les challenges que tu ajoutes avec le formulaire apparaîtront ici." />
         ) : (
           <Table>
             <TableHeader>

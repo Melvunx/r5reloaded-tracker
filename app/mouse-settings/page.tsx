@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { CardSkeleton } from "@/components/card-skeleton";
 import { SensitivityForm } from "@/components/mouse-settings/sensitivity-form";
 import { SensitivityHistory } from "@/components/mouse-settings/sensitivity-history";
 import { listSensitivities } from "@/lib/sensitivity-service";
@@ -28,7 +29,14 @@ export default function MouseSettingsPage() {
           Garde l&apos;historique de ton DPI et de ta sensibilité pour relier ta progression à tes réglages.
         </p>
       </div>
-      <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement des réglages…</p>}>
+      <Suspense
+        fallback={
+          <>
+            <CardSkeleton rows={3} />
+            <CardSkeleton />
+          </>
+        }
+      >
         <MouseSettingsContent />
       </Suspense>
     </div>

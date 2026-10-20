@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { CardSkeleton } from "@/components/card-skeleton";
 import { ImportForm } from "@/components/import/import-form";
 import { ImportHistory } from "@/components/import/import-history";
 
@@ -15,7 +16,7 @@ export default function ImportPage() {
         </p>
       </div>
       <ImportForm />
-      <Suspense fallback={<p className="text-sm text-muted-foreground">Chargement de l&apos;historique…</p>}>
+      <Suspense fallback={<CardSkeleton />}>
         <ImportHistory />
       </Suspense>
     </div>
