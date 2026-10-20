@@ -18,7 +18,13 @@ export const ChartFiltersSchema = z.object({
   weaponType: WeaponTypeSchema.optional().catch(undefined),
   range: z.enum(RANGES).catch(DEFAULT_RANGE),
   challenge: z.string().trim().min(1).max(100).optional().catch(undefined),
-});
+  // Seconde arme à superposer à `weapon` dans le graphique
+  compare: WeaponSlugSchema.optional().catch(undefined),
+}).transform((filters) => ({
+  ...filters,
+  // Une comparaison n'a de sens qu'entre deux armes différentes
+  compare: filters.weapon && filters.compare !== filters.weapon ? filters.compare : undefined,
+}));
 
 export type ChartFilters = z.output<typeof ChartFiltersSchema>;
 
@@ -32,5 +38,6 @@ export function parseChartFilters(searchParams: SearchParams): ChartFilters {
     weaponType: first(searchParams.weaponType),
     range: first(searchParams.range),
     challenge: first(searchParams.challenge),
+    compare: first(searchParams.compare),
   });
 }

@@ -195,7 +195,7 @@ accepte aussi les anciens cuid v1).
   `shotsHit ≤ totalShots`, `criticalShots ≤ shotsHit`, précision cohérente à ±0,5 %. Arme inconnue (après alias) → erreur explicite.
 - Messages d'erreur **en français**, avec numéro de ligne pour l'import.
 - Filtres du graphique : `ChartFiltersSchema` (`weapon`, `weaponType`, `range` ∈ `1d|1w|1m|all` défaut `1w`, `challenge?`)
-  parsé depuis `searchParams` ; valeur invalide → défaut, pas de crash.
+  parsé depuis `searchParams` ; valeur invalide → défaut, pas de crash. `compare?` (2e arme, ignorée sans `weapon` ou si identique) superpose une 2e série au graphique (`chart-rows.ts` fusionne les séries) et remplace KPI + tableau par `CompareCard`.
 
 ## 8. Fonctionnalités
 
@@ -203,7 +203,7 @@ accepte aussi les anciens cuid v1).
 - **Page `/`** : présentation de l'application et comment l'utiliser (3 étapes). Le dashboard est sur `/dashboard`.
 - **Import** (`/import`) : drag & drop `.txt`, vérif signature + en‑têtes, **aperçu avant insertion** (valides / invalides, champ `playedAt` défaut = aujourd'hui), refus si hash déjà importé, historique avec « Annuler cet import ».
 - **Saisie manuelle** : formulaire shadcn (`Field`, `Input`, `Select` d'arme avec image), même schéma Zod client et serveur.
-- **Graphique** : une courbe de précision ; axe X par session sur « 1 jour », agrégé **par jour** (précision pondérée) sur semaine/mois ; tooltip date / arme / précision / touchés sur total. Option « comparer » : séries `--chart-1..5`.
+- **Graphique** : une courbe de précision ; axe X par session sur « 1 jour », agrégé **par jour** (précision pondérée) sur semaine/mois ; tooltip date / arme / précision / touchés sur total. Option « comparer » : fait pour 2 armes (`--chart-1` et `--chart-2`).
 - **Stats par arme** (même filtre de période) : précision pondérée, % critiques (`criticalShots / shotsHit`), dégâts et kills moyens, nombre de challenges, meilleure précision, tendance vs période précédente. Grille de cartes ou tableau triable.
 - **KPI** : précision globale, nombre de sessions, temps total (`SUM(roundtime)`), meilleure arme.
 

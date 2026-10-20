@@ -18,6 +18,13 @@ describe("ChartFiltersSchema", () => {
     ).toEqual({ range: "1w" });
   });
 
+  it("garde la comparaison seulement entre deux armes différentes", () => {
+    expect(parseChartFilters({ weapon: "r99", compare: "volt" }).compare).toBe("volt");
+    expect(parseChartFilters({ weapon: "r99", compare: "r99" }).compare).toBeUndefined();
+    expect(parseChartFilters({ compare: "volt" }).compare).toBeUndefined();
+    expect(parseChartFilters({ weapon: "r99", compare: "bocek" }).compare).toBeUndefined();
+  });
+
   it("prend le premier élément d'un paramètre répété", () => {
     expect(parseChartFilters({ range: ["1d", "all"], weapon: ["r99", "volt"] })).toEqual({
       range: "1d",

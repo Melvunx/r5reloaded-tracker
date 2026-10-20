@@ -1,4 +1,5 @@
 import { APP_TIME_ZONE } from "@/config/time.config";
+import { mergeSeries, type ChartRow } from "@/lib/chart-rows";
 import { prisma } from "@/lib/prisma";
 import { rangeStart, weightedAccuracy } from "@/lib/stats";
 import type { ChartFilters } from "@/schema/filters";
@@ -16,7 +17,9 @@ export type ChartPoint = {
 
 export type ChartData = {
   granularity: "session" | "day";
-  points: ChartPoint[];
+  rows: ChartRow[];
+  /** Vrai si la série B (arme comparée) est présente. */
+  compare: boolean;
 };
 
 /** Filtres du dashboard en `where` Prisma ; `period` borne `playedAt` (gte inclus, lt exclu). */
@@ -111,12 +114,16 @@ export async function getChartData(
   now = new Date(),
 ): Promise<ChartData> {
   const since = rangeStart(filters.range, now);
-  if (filters.range === "1d")
-    return {
-      granularity: "session",
-      points: await getSessionPoints(filters, since),
-    };
-  return { granularity: "day", points: await getDayPoints(filters, since) };
+  const granularity = filters.range === "1d" ? "session" : "day";
+  const load = (f: ChartFilters) =>
+    granularity === "session" ? getSessionPoints(f, since) : getDayPoints(f, since);
+
+  const { compare, ...base } = filters;
+  const [a, b] = await Promise.all([
+    load({ ...base, compare }),
+    compare ? load({ ...base, weapon: compare, compare: undefined }) : Promise.resolve([]),
+  ]);
+  return { granularity, rows: mergeSeries(a, b), compare: Boolean(compare) };
 }
 
 /** Noms de challenges déjà joués, pour le filtre. */

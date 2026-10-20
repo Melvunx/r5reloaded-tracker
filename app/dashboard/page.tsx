@@ -7,8 +7,10 @@ import { AccuracyChart } from "@/components/dashboard/accuracy-chart";
 import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { KpiCards } from "@/components/dashboard/kpi-cards";
 import { WeaponStatsTable } from "@/components/dashboard/weapon-stats-table";
+import { CompareCard } from "@/components/dashboard/compare-card";
 import { ChartFilters } from "@/components/dashboard/chart-filters";
 import { EmptyState } from "@/components/empty-state";
+import { getWeaponBySlug } from "@/config/apex-weapons.config";
 import { buttonVariants } from "@/components/ui/button";
 import { getChartData, listChallengeNames } from "@/lib/chart-service";
 import { getDashboardStats } from "@/lib/stats-service";
@@ -30,20 +32,42 @@ async function DashboardContent({ searchParams }: Props) {
     listChallengeNames(),
   ]);
 
+  // Comparaison : on isole chaque arme pour lire ses stats sur la même période
+  const weaponStat = async (weapon: string) =>
+    (await getDashboardStats({ ...filters, weapon, weaponType: undefined, compare: undefined }, now)).weapons[0];
+  const comparison =
+    filters.weapon && filters.compare
+      ? {
+          nameA: getWeaponBySlug(filters.weapon)?.name ?? filters.weapon,
+          nameB: getWeaponBySlug(filters.compare)?.name ?? filters.compare,
+          a: await weaponStat(filters.weapon),
+          b: await weaponStat(filters.compare),
+        }
+      : null;
+
   return (
     <Stagger className="flex flex-col gap-6">
       {challengeNames.length > 0 && (
         <StaggerItem>
-          <ChartFilters filters={filters} challengeNames={challengeNames} />
+          <ChartFilters filters={filters} challengeNames={challengeNames} favorites={stats.favorites} />
         </StaggerItem>
       )}
-      {chart.points.length > 0 ? (
+      {chart.rows.length > 0 && comparison ? (
+        <>
+          <StaggerItem>
+            <AccuracyChart {...chart} labels={{ a: comparison.nameA, b: comparison.nameB }} />
+          </StaggerItem>
+          <StaggerItem>
+            <CompareCard {...comparison} />
+          </StaggerItem>
+        </>
+      ) : chart.rows.length > 0 ? (
         <>
           <StaggerItem>
             <KpiCards kpi={stats.kpi} />
           </StaggerItem>
           <StaggerItem>
-            <AccuracyChart {...chart} />
+            <AccuracyChart {...chart} labels={{ a: "Précision", b: null }} />
           </StaggerItem>
           <StaggerItem>
             <WeaponStatsTable weapons={stats.weapons} hasTrend={filters.range !== "all"} />
