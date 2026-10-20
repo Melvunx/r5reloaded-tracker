@@ -17,7 +17,7 @@ Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide
 `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
-Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision + filtres en `searchParams`, fait ; stats par arme et KPI à venir), `/import`,
+Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision, KPI (dont « arme préférée » = la plus jouée) et stats par arme, filtres en `searchParams`, fait), `/import`,
 `/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle + historique avec suppression, fait).
 Le `README.md` décrit déjà l'app finie.
 
@@ -248,7 +248,7 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 5. Parser R5Reloaded + action d'import + page d'import avec aperçu.
 6. ~~Saisie manuelle~~ (fait : `/manual-entry`, `addManualChallenge`).
 7. ~~`getChartData(filters)` + graphique + filtres en searchParams~~ (fait : `src/lib/chart-service.ts`, `src/components/dashboard/`).
-8. Stats par arme + KPI.
+8. ~~Stats par arme + KPI~~ (fait : `src/lib/stats.ts`, `stats-service.ts`).
 9. Polish : dark mode, états vides, skeletons, toasts.
 
 Une étape est terminée quand `pnpm lint`, `pnpm typecheck` et `pnpm test` passent.

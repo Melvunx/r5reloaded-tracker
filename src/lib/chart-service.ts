@@ -19,15 +19,16 @@ export type ChartData = {
   points: ChartPoint[];
 };
 
-function buildWhere(
+/** Filtres du dashboard en `where` Prisma ; `period` borne `playedAt` (gte inclus, lt exclu). */
+export function buildWhere(
   filters: ChartFilters,
-  since: Date | null,
+  period: { gte?: Date; lt?: Date },
 ): Prisma.ChallengeWhereInput {
   return {
     ...(filters.weapon && { weaponId: filters.weapon }),
     ...(filters.weaponType && { weapon: { type: filters.weaponType } }),
     ...(filters.challenge && { challengeName: filters.challenge }),
-    ...(since && { playedAt: { gte: since } }),
+    ...(Object.keys(period).length > 0 && { playedAt: period }),
   };
 }
 
@@ -37,7 +38,7 @@ async function getSessionPoints(
   since: Date | null,
 ): Promise<ChartPoint[]> {
   const rows = await prisma.challenge.findMany({
-    where: buildWhere(filters, since),
+    where: buildWhere(filters, since ? { gte: since } : {}),
     orderBy: { playedAt: "asc" },
     select: {
       playedAt: true,
