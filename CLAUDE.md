@@ -13,8 +13,7 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
 Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`, Prisma 7 (CLI épinglé en
-7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Recharts 3.8 installé via shadcn `chart`. Pas encore installés (**cible**) :
-`motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
+7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Recharts 3.8 installé via shadcn `chart`. `motion` 14 installé (animations). Vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
 Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision, KPI (« arme préférée » = la plus jouée sur tout l'historique, + une favorite par catégorie avec effets CSS dans `globals.css`) et stats par arme, filtres en `searchParams`, fait), `/import`,
@@ -249,6 +248,6 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 6. ~~Saisie manuelle~~ (fait : `/manual-entry`, `addManualChallenge`).
 7. ~~`getChartData(filters)` + graphique + filtres en searchParams~~ (fait : `src/lib/chart-service.ts`, `src/components/dashboard/`).
 8. ~~Stats par arme + KPI~~ (fait : `src/lib/stats.ts`, `stats-service.ts`).
-9. Polish : dark mode (fait : `ThemeProvider` + `ThemeToggle`, défaut = thème du système), états vides (`EmptyState`) et skeletons (`CardSkeleton`, `DashboardSkeleton`) faits ; reste la passe couleurs / design.
+9. Polish : dark mode (fait : `ThemeProvider` + `ThemeToggle`, défaut = thème du système), états vides (`EmptyState`) et skeletons (`CardSkeleton`, `DashboardSkeleton`) faits ; palette « Apex » (rouge `--primary`, orange `--highlight` en accent, clair + sombre) et polices faites : titres Rajdhani, texte Inter, chiffres JetBrains Mono (`font-mono`), armes favorites en Black Ops One (préférée) / Russo One (catégories) via `[data-favorite]` dans `globals.css`. Animations `motion` faites : `app/template.tsx` → `PageTransition` (entrée), `TransitionLink` (sortie jouée avant `router.push`, car AnimatePresence ne marche pas avec le routeur de Next sans API internes), `Stagger` / `StaggerItem` (apparition en cascade), `MotionProvider` (`reducedMotion="user"`) dans `src/components/motion/`.
 
 Une étape est terminée quand `pnpm lint`, `pnpm typecheck` et `pnpm test` passent.

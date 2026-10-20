@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { WeaponImage } from "@/components/weapon-image";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPlayTime } from "@/lib/stats";
 import type { DashboardStats } from "@/lib/stats-service";
@@ -31,16 +32,18 @@ export function KpiCards({ kpi }: { kpi: DashboardStats["kpi"] }) {
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+    <Stagger nested className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
       {items.map(({ label, value, hint, numeric }) => (
-        <Card key={label}>
-          <CardHeader>
-            <CardDescription>{label}</CardDescription>
-            <CardTitle className={numeric ? "font-mono text-2xl" : "text-2xl"}>{value}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-xs text-muted-foreground">{hint}</CardContent>
-        </Card>
+        <StaggerItem key={label}>
+          <Card className="h-full">
+            <CardHeader>
+              <CardDescription>{label}</CardDescription>
+              <CardTitle className={numeric ? "font-mono text-2xl" : "text-2xl"}>{value}</CardTitle>
+            </CardHeader>
+            <CardContent className="text-xs text-muted-foreground">{hint}</CardContent>
+          </Card>
+        </StaggerItem>
       ))}
-    </div>
+    </Stagger>
   );
 }

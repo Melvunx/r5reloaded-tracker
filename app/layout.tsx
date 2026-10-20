@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Black_Ops_One, Inter, JetBrains_Mono, Rajdhani, Russo_One } from "next/font/google";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import { SiteHeader } from "@/components/site-header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -23,9 +24,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${inter.variable} ${rajdhani.variable} ${jetbrainsMono.variable} ${blackOpsOne.variable} ${russoOne.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <SiteHeader />
-          <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
-          <Toaster />
+          <MotionProvider>
+            <SiteHeader />
+            <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
+            <Toaster />
+          </MotionProvider>
         </ThemeProvider>
       </body>
     </html>

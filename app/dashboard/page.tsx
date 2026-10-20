@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
+import { TransitionLink } from "@/components/motion/transition-link";
 import { AccuracyChart } from "@/components/dashboard/accuracy-chart";
 import { DashboardSkeleton } from "@/components/dashboard/dashboard-skeleton";
 import { KpiCards } from "@/components/dashboard/kpi-cards";
@@ -30,37 +31,47 @@ async function DashboardContent({ searchParams }: Props) {
   ]);
 
   return (
-    <>
-      {challengeNames.length > 0 && <ChartFilters filters={filters} challengeNames={challengeNames} />}
+    <Stagger className="flex flex-col gap-6">
+      {challengeNames.length > 0 && (
+        <StaggerItem>
+          <ChartFilters filters={filters} challengeNames={challengeNames} />
+        </StaggerItem>
+      )}
       {chart.points.length > 0 ? (
         <>
-          <KpiCards kpi={stats.kpi} />
-          <AccuracyChart {...chart} />
-          <WeaponStatsTable weapons={stats.weapons} hasTrend={filters.range !== "all"} />
+          <StaggerItem>
+            <KpiCards kpi={stats.kpi} />
+          </StaggerItem>
+          <StaggerItem>
+            <AccuracyChart {...chart} />
+          </StaggerItem>
+          <StaggerItem>
+            <WeaponStatsTable weapons={stats.weapons} hasTrend={filters.range !== "all"} />
+          </StaggerItem>
         </>
       ) : challengeNames.length === 0 ? (
         <EmptyState
           title="Aucun challenge pour le moment"
           description="Importe un export R5Reloaded ou saisis une partie à la main pour voir ta progression."
         >
-          <Link href="/import" className={buttonVariants()}>
+          <TransitionLink href="/import" className={buttonVariants()}>
             Importer des résultats
-          </Link>
-          <Link href="/manual-entry" className={buttonVariants({ variant: "outline" })}>
+          </TransitionLink>
+          <TransitionLink href="/manual-entry" className={buttonVariants({ variant: "outline" })}>
             Saisir une partie
-          </Link>
+          </TransitionLink>
         </EmptyState>
       ) : (
         <EmptyState
           title="Aucun challenge ne correspond à ces filtres"
           description="Élargis la période ou retire un filtre."
         >
-          <Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+          <TransitionLink href="/dashboard" className={buttonVariants({ variant: "outline" })}>
             Réinitialiser les filtres
-          </Link>
+          </TransitionLink>
         </EmptyState>
       )}
-    </>
+    </Stagger>
   );
 }
 

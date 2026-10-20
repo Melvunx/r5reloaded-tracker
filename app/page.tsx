@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
+import { TransitionLink } from "@/components/motion/transition-link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -30,27 +31,29 @@ export default function Home() {
           restent sur ma machine : pas de compte, pas de déploiement.
         </p>
         <div className="flex flex-wrap gap-2">
-          <Link href="/import" className={buttonVariants({ size: "lg" })}>
+          <TransitionLink href="/import" className={buttonVariants({ size: "lg" })}>
             Importer des résultats
-          </Link>
-          <Link href="/dashboard" className={buttonVariants({ variant: "outline", size: "lg" })}>
+          </TransitionLink>
+          <TransitionLink href="/dashboard" className={buttonVariants({ variant: "outline", size: "lg" })}>
             Tableau de bord
-          </Link>
+          </TransitionLink>
         </div>
       </section>
 
       <section className="flex flex-col gap-4">
         <h2 className="text-xl font-semibold tracking-tight">Comment l&apos;utiliser</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+        <Stagger className="grid gap-4 md:grid-cols-3">
           {STEPS.map(({ title, description }) => (
-            <Card key={title}>
-              <CardHeader>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
-              </CardHeader>
-            </Card>
+            <StaggerItem key={title}>
+              <Card className="h-full">
+                <CardHeader>
+                  <CardTitle>{title}</CardTitle>
+                  <CardDescription>{description}</CardDescription>
+                </CardHeader>
+              </Card>
+            </StaggerItem>
           ))}
-        </div>
+        </Stagger>
       </section>
     </div>
   );
