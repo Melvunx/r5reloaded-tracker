@@ -4,9 +4,11 @@ import { prisma } from "@/lib/prisma";
 import {
   buildKpi,
   buildWeaponStats,
+  favoriteKind,
   pickFavorites,
   previousPeriod,
   rangeStart,
+  type FavoriteKind,
   type Favorites,
   type Kpi,
   type WeaponStatRow,
@@ -41,18 +43,15 @@ export type WeaponStat = WeaponStatRow & {
   slug: string;
   type: NonNullable<ReturnType<typeof getWeaponBySlug>>["type"];
   /** « overall » = arme préférée de tout l'historique, « category » = favorite de sa catégorie (pour les effets visuels). */
-  favorite: "overall" | "category" | null;
+  favorite: FavoriteKind | null;
 };
 
 export type DashboardStats = {
   kpi: Kpi & { bestWeaponName: string | null; favoriteWeapon: { name: string; slug: string; type: WeaponStat["type"] } | null };
   weapons: WeaponStat[];
+  /** Favorites de tout l'historique, indépendantes des filtres. */
+  favorites: Favorites;
 };
-
-function favoriteKind(favorites: Favorites, weaponId: string, type: WeaponStat["type"]): WeaponStat["favorite"] {
-  if (favorites.overall === weaponId) return "overall";
-  return favorites.byType[type] === weaponId ? "category" : null;
-}
 
 const weaponName = (slug: string | null) => (slug ? (getWeaponBySlug(slug)?.name ?? null) : null);
 
@@ -66,7 +65,7 @@ export async function getDashboardStats(filters: ChartFilters, now = new Date())
   ]);
 
   // Les favorites se calculent sur tout l'historique : elles ne bougent pas quand on change de filtre
-  const allTime = await getWeaponTotals({ range: "all" }, {});
+  const allTime = await getWeaponTotals({ range: "all", compare: undefined }, {});
   const favorites = pickFavorites(allTime, (id) => getWeaponBySlug(id)?.type);
 
   const kpi = buildKpi(current);
@@ -81,5 +80,6 @@ export async function getDashboardStats(filters: ChartFilters, now = new Date())
   return {
     kpi: { ...kpi, bestWeaponName: weaponName(kpi.bestWeaponId), favoriteWeapon: favorites.overall ? (getWeaponBySlug(favorites.overall) ?? null) : null },
     weapons,
+    favorites,
   };
 }

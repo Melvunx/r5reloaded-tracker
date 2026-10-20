@@ -110,6 +110,8 @@ export function formatPlayTime(seconds: number) {
   return hours < 1 ? `${minutes} min` : `${hours} h ${String(minutes % 60).padStart(2, "0")}`;
 }
 
+export type FavoriteKind = "overall" | "category";
+
 export type Favorites = { overall: string | null; byType: Partial<Record<WeaponType, string>> };
 
 /**
@@ -129,4 +131,10 @@ export function pickFavorites(
     if (type && !byType[type]) byType[type] = entry.weaponId;
   }
   return { overall: [...totals].sort(mostPlayed)[0]?.weaponId ?? null, byType };
+}
+
+/** Rôle d'une arme parmi les favorites : « overall » = préférée, « category » = favorite de sa catégorie. */
+export function favoriteKind(favorites: Favorites, weaponId: string, type: WeaponType): FavoriteKind | null {
+  if (favorites.overall === weaponId) return "overall";
+  return favorites.byType[type] === weaponId ? "category" : null;
 }
