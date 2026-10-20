@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getExportDate } from "@/lib/export-date";
 import { ChallengeSchema, type ChallengeData } from "./challenge";
+import { emptyToUndefined } from "./shared";
 
 /** En-têtes exacts attendus sur la 2e ligne d'un export R5Reloaded. */
 export const R5_HEADERS = [
@@ -54,9 +55,6 @@ export function parseImportRow(lineNumber: number, row: unknown): ImportLineResu
     errors: result.error.issues.map((issue) => `Ligne ${lineNumber} : ${issue.message}`),
   };
 }
-
-// Un champ vide (`""`) ou absent (`formData.get` renvoie null) vaut « non renseigné » : sans ça, coerce.date(null) donne 1970
-const emptyToUndefined = (value: unknown) => (value === "" || value === null ? undefined : value);
 
 /**
  * Formulaire d'import : le fichier `.txt` et la date de la session. Sans date saisie, on prend celle de l'export

@@ -1,12 +1,9 @@
 import { z } from "zod";
+import { emptyToUndefined } from "./shared";
 import { resolveWeaponSlug } from "./weapon";
 
 /** Écart toléré entre la précision fournie et `shotsHit / totalShots` (en points de %). */
 export const ACCURACY_TOLERANCE = 0.5;
-
-// Une chaîne vide serait convertie en 0 par z.coerce : on la traite comme une valeur absente
-const emptyToUndefined = (value: unknown) =>
-  typeof value === "string" && value.trim() === "" ? undefined : value;
 
 function intField(label: string, min = 0) {
   return z.preprocess(
