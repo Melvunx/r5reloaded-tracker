@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { MOUSE_DPI_RANGE, MOUSE_SENSITIVITY_RANGE } from "@/config/mouse.config";
-import { emptyToUndefined } from "./shared";
+import { emptyToUndefined, entityId } from "./shared";
 
 /** Nouveau réglage souris (formulaire). `effectiveFrom` vide = aujourd'hui. */
 export const SensitivityFormSchema = z.object(
@@ -35,6 +35,6 @@ export type SensitivityFormInput = z.input<typeof SensitivityFormSchema>;
 export type SensitivityFormData = z.output<typeof SensitivityFormSchema>;
 
 export const DeleteSensitivitySchema = z.object(
-  { id: z.cuid2({ error: "Identifiant de réglage invalide" }) },
+  { id: entityId("Identifiant de réglage invalide") },
   { error: "Requête invalide" },
 );

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { getExportDate } from "@/lib/export-date";
 import { ChallengeSchema, type ChallengeData } from "./challenge";
-import { emptyToUndefined } from "./shared";
+import { emptyToUndefined, entityId } from "./shared";
 
 /** En-têtes exacts attendus sur la 2e ligne d'un export R5Reloaded. */
 export const R5_HEADERS = [
@@ -89,6 +89,6 @@ export type ImportFormData = z.output<typeof ImportFormSchema>;
  * permissive qui accepte aussi les ids v1 produits par `@default(cuid())`.
  */
 export const DeleteImportSchema = z.object(
-  { id: z.cuid2({ error: "Identifiant d'import invalide" }) },
+  { id: entityId("Identifiant d'import invalide") },
   { error: "Requête invalide" },
 );

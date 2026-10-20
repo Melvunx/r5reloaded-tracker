@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { emptyToUndefined } from "./shared";
+import { emptyToUndefined, entityId } from "./shared";
 import { resolveWeaponSlug } from "./weapon";
 
 /** Écart toléré entre la précision fournie et `shotsHit / totalShots` (en points de %). */
@@ -116,6 +116,6 @@ export type ManualChallengeData = z.output<typeof ManualChallengeSchema>;
 
 /** Suppression d'un challenge saisi à la main (id généré par Prisma, cf. `DeleteImportSchema`). */
 export const DeleteChallengeSchema = z.object(
-  { id: z.cuid2({ error: "Identifiant de challenge invalide" }) },
+  { id: entityId("Identifiant de challenge invalide") },
   { error: "Requête invalide" },
 );
