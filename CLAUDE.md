@@ -13,11 +13,11 @@ Langue du projet : **français** (UI, messages d'erreur, commentaires). Code et 
 Scaffold `create-next-app` + `shadcn init` faits. `src/` existe (`components/ui`, `lib/`, `config/`, `schema/`) ; alias `@/*` → `./src/*` et `@app/*` → `./app/*` configurés dans `tsconfig.json`.
 
 Installé : Next 16.4, React 19.3, Tailwind 4, shadcn, `@base-ui/react`, `lucide-react`, Prisma 7 (CLI épinglé en
-7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Pas encore installés (**cible**) :
-Recharts, `motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
+7.10.1 : le tag `latest` de `prisma` pointe sur une RC 8), Zod 4, Vitest. Sonner et `next-themes` (dépendance de sonner) installés. Recharts 3.8 installé via shadcn `chart`. Pas encore installés (**cible**) :
+`motion` ; vérifier `package.json` avant de supposer qu'une dépendance existe.
 Étapes 1 à 4 du plan faites ; schémas Zod et tests dans `src/schema/`. Étape 5 : parser, actions `previewImport` / `confirmImport`
 et page `/import` (envoi + aperçu) faits ; historique des imports et « Annuler cet import » faits (`deleteImportBatch`, `ImportHistory`).
-Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (placeholder pour l'instant), `/import`,
+Routes : `/` = présentation de l'app et mode d'emploi, `/dashboard` = tableau de bord (graphique de précision + filtres en `searchParams`, fait ; stats par arme et KPI à venir), `/import`,
 `/mouse-settings` (historique DPI / sensibilité, fait), `/manual-entry` (saisie manuelle, faite).
 Le `README.md` décrit déjà l'app finie.
 
@@ -247,7 +247,7 @@ public/apex-weapons/<type>/<slug>.png et badges/<slug>.webp
 4. Schémas Zod + tests.
 5. Parser R5Reloaded + action d'import + page d'import avec aperçu.
 6. ~~Saisie manuelle~~ (fait : `/manual-entry`, `addManualChallenge`).
-7. `getChartData(filters)` + graphique + filtres en searchParams.
+7. ~~`getChartData(filters)` + graphique + filtres en searchParams~~ (fait : `src/lib/chart-service.ts`, `src/components/dashboard/`).
 8. Stats par arme + KPI.
 9. Polish : dark mode, états vides, skeletons, toasts.
 
