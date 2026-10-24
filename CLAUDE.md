@@ -69,6 +69,10 @@ VERIF_LINE="<texte de la 1re ligne de l'export R5Reloaded>"
 Environnement : le projet est sous `/mnt/c` (WSL) → CRLF possible, et le hot reload peut rater les
 changements (`WATCHPACK_POLLING=true pnpm dev`).
 
+SSH / GitHub : si une commande git échoue avec `Permission denied (publickey)` (ex. remote `upstream` en SSH), l'agent SSH
+n'est pas lancé dans la session. **Me demander de le lancer** (en parallèle, je tape le `!` dans le prompt) :
+`! eval $(ssh-agent) && ssh-add ~/.ssh/id_ed25519`, puis relancer la commande. `main` suit `origin/main` (HTTPS).
+
 ---
 
 ## 4. Acquis de la v2 à réutiliser
