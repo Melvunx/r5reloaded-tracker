@@ -77,6 +77,10 @@ export function AccuracyChart({ granularity, rows, compare, markers, labels }: C
     ...(compare && labels.b ? { accuracyB: { label: labels.b, color: "var(--chart-2)" } } : {}),
   } satisfies ChartConfig;
 
+  // Axe X par position : plusieurs lignes partagent la même date (même import), et sur un axe de dates
+  // Recharts rattache alors le survol à la première seulement.
+  const indexedRows = rows.map((row, index) => ({ ...row, index }));
+
   return (
     <Card>
       <CardHeader>
@@ -90,15 +94,18 @@ export function AccuracyChart({ granularity, rows, compare, markers, labels }: C
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-72 w-full">
-          <LineChart data={rows} margin={{ left: 4, right: 12, top: 8 }}>
+          <LineChart data={indexedRows} margin={{ left: 4, right: 12, top: 8 }}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey="index"
+              type="number"
+              domain={[0, Math.max(rows.length - 1, 0)]}
+              allowDecimals={false}
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={24}
-              tickFormatter={(value: string) => formatTick(value, granularity)}
+              tickFormatter={(value: number) => (rows[value] ? formatTick(rows[value].date, granularity) : "")}
             />
             <YAxis
               domain={[0, 100]}
@@ -116,7 +123,7 @@ export function AccuracyChart({ granularity, rows, compare, markers, labels }: C
             {markers.map((marker) => (
               <ReferenceLine
                 key={marker.x}
-                x={marker.x}
+                x={rows.findIndex((row) => row.date === marker.x)}
                 stroke="var(--muted-foreground)"
                 strokeDasharray="4 4"
                 label={{ value: marker.label, position: "insideTopRight", fontSize: 11, fill: "var(--muted-foreground)" }}
